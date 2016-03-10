@@ -59,11 +59,15 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="PoolTest.cs" />
+    <Compile Include="Pool\Pool.Generic.Test.Set.cs" />
+    <Compile Include="Pool\Pool.Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
+    <Compile Include="Pool\Pool.Generic.Test.Get.cs" />
+    <Compile Include="Pool\Pool.Generic.Test.cs" />
+    <Compile Include="Pool\Pool.Generic.Test.Constructors.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Atomos\Atomos.csproj">
