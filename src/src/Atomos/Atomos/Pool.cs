@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Atomos.Atomos
 {
@@ -55,6 +56,11 @@ namespace Atomos.Atomos
         }
 
         public void Set(T item)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Set(IEnumerable<T> items)
         {
             throw new NotImplementedException();
         }
