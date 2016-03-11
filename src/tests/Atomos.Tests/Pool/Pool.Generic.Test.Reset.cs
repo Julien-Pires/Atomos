@@ -27,7 +27,8 @@ namespace Atomos.Tests.Pool
         [InlineData(int.MaxValue)]
         public void Reset_NoClean_WithCustomReset(int value)
         {
-            Pool<T> pool = new Pool<T>(() => new T(), c => c.Value = value);
+            PoolSettings<T> settings = new PoolSettings<T> { Reset = c => c.Value = value };
+            Pool<T> pool = new Pool<T>(settings);
             _pool.Get();
             _pool.Reset();
 

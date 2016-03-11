@@ -16,19 +16,7 @@ namespace Atomos.Atomos
 
         #region Constructors
 
-        public Pool()
-        {
-        }
-
-        public Pool(int capacity)
-        {
-        }
-
-        public Pool(Func<T> createAction, Action<T> resetAction)
-        {
-        }
-
-        public Pool(int capacity, Func<T> createAction, Action<T> resetAction)
+        public Pool(PoolSettings<T>? settings = null)
         {
         }
 

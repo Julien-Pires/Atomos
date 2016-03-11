@@ -22,7 +22,8 @@ namespace Atomos.Tests.Pool
         [InlineData(100, 100)]
         public void Constructor_InitialCapacity(int capacity, int count)
         {
-            Pool<T> pool = new Pool<T>(capacity);
+            PoolSettings<T> settings = new PoolSettings<T> { Capacity = capacity };
+            Pool <T> pool = new Pool<T>(settings);
 
             Assert.Equal(count, pool.Count);
         }
@@ -32,7 +33,9 @@ namespace Atomos.Tests.Pool
         [InlineData(int.MinValue)]
         public void Constructor_NegativeCapacity_ThrowException(int capacity)
         {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new Pool<T>(capacity));
+            PoolSettings<T> settings = new PoolSettings<T> { Capacity = capacity };
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Pool<T>(settings));
         }
 
 		[Fact]
@@ -49,15 +52,10 @@ namespace Atomos.Tests.Pool
         [InlineData(int.MinValue)]
         public void Constructor_CustomInitializer(int value)
         {
-            Pool<T> pool = new Pool<T>(() => new T() { Value = value }, c => { });
+            PoolSettings<T> settings = new PoolSettings<T> { Initializer = () => new T() { Value = value } };
+            Pool<T> pool = new Pool<T>(settings);
 
             Assert.Equal(value, pool.Get().Value);
-        }
-
-        [Fact]
-        public void Constructor_NullInitializer_ThrowException()
-        {
-            Assert.Throws<ArgumentNullException>(() => new Pool<T>(null, c => { }));
         }
 
 		[Fact]
@@ -77,16 +75,12 @@ namespace Atomos.Tests.Pool
         [InlineData(int.MaxValue)]
         public void Constructor_CustomReset(int value)
         {
-            Pool<T> pool = new Pool<T>(() => new T(), c => c.Value = value);
+            PoolSettings<T> settings = new PoolSettings<T> { Reset = c => c.Value = value };
+            Pool<T> pool = new Pool<T>(settings);
             T item = pool.Get();
             pool.Set(item);
 
             Assert.Equal(value, pool.Get().Value);
-        }
-
-        public void Constructor_NullReset_ThrowException()
-        {
-            Assert.Throws<ArgumentNullException>(() => new Pool<T>(() => new T(), null));
         }
     }
 }
