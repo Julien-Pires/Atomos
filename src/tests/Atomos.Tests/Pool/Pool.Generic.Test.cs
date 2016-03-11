@@ -6,13 +6,13 @@ namespace Atomos.Tests.Pool
     {
         #region Fields
 
-        private Pool<T> _pool;
+        protected Pool<T> _pool;
 
         #endregion
 
         #region Constructors
 
-        public Pool_Generic_Test()
+        protected Pool_Generic_Test(PoolSettings<T>? settings = null)
         {
             _pool = new Pool<T>();
         }
