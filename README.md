@@ -1,5 +1,5 @@
 # Atomos
-Collection of classes used to solve specific problems
+.NET Collection of classes.
 
  | Debug | Release
 --- | --- | ---
