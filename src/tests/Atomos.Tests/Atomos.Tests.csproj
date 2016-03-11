@@ -101,6 +101,7 @@
     <Compile Include="Pool\Pool.Generic.Test.Get.cs" />
     <Compile Include="Pool\Pool.Generic.Test.cs" />
     <Compile Include="Pool\Pool.Generic.Test.Constructors.cs" />
+    <Compile Include="Pool\Pool.Generic.Test.Reset.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Atomos\Atomos.csproj">

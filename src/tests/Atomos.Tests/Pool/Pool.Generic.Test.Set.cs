@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 using Xunit;
 
@@ -11,7 +12,7 @@ namespace Atomos.Tests.Pool
         [InlineData(10, 1)]
         [InlineData(100, 1)]
         [InlineData(50000, 1)]
-        public void Set_Single_Success(int itemsCount, int count)
+        public void Set_SingleItems(int itemsCount, int count)
         {
             for (int i = 0; i < itemsCount; i++)
             {
@@ -22,12 +23,18 @@ namespace Atomos.Tests.Pool
             Assert.Equal(count, _pool.Count);
         }
 
+        [Fact]
+        public void Set_NullSingleItems_ThrowException()
+        {
+            Assert.Throws<ArgumentNullException>(() => _pool.Set((T)null));
+        }
+
         [Theory]
         [InlineData(0, 0)]
         [InlineData(10, 1)]
         [InlineData(100, 1)]
         [InlineData(50000, 1)]
-        public void Set_Multiple_Success(int itemsCount, int count)
+        public void Set_MultipleItems(int itemsCount, int count)
         {
             for(int i = 0; i < itemsCount; i++)
             {
@@ -38,12 +45,18 @@ namespace Atomos.Tests.Pool
             Assert.Equal(count, _pool.Count);
         }
 
+        [Fact]
+        public void Set_NullMultipleItems_ThrowException()
+        {
+            Assert.Throws<ArgumentNullException>(() => _pool.Set((IEnumerable<T>)null));
+        }
+
         [Theory]
         [InlineData(0, 0)]
         [InlineData(10, 10)]
         [InlineData(100, 100)]
         [InlineData(50000, 50000)]
-        public void Set_Single_Available_Items(int itemsCount, int count)
+        public void Set_SingleItems_TotalAvailable(int itemsCount, int count)
         {
             List<T> itemsList = new List<T>(itemsCount);
             for (int i = 0; i < itemsCount; i++)
@@ -60,7 +73,7 @@ namespace Atomos.Tests.Pool
         [InlineData(10, 10)]
         [InlineData(100, 100)]
         [InlineData(50000, 50000)]
-        public void Set_Multiple_Available_Items(int itemsCount, int count)
+        public void Set_MultipleItems_TotalAvailable(int itemsCount, int count)
         {
             List<T> itemsList = new List<T>(itemsCount);
             for (int i = 0; i < itemsCount; i++)
