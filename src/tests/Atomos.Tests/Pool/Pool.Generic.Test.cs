@@ -6,7 +6,7 @@ namespace Atomos.Tests.Pool
     {
         #region Fields
 
-        protected Pool<T> _pool;
+        protected readonly Pool<T> _pool;
 
         #endregion
 
@@ -14,7 +14,7 @@ namespace Atomos.Tests.Pool
 
         protected Pool_Generic_Test(PoolSettings<T>? settings = null)
         {
-            _pool = new Pool<T>();
+            _pool = new Pool<T>(settings);
         }
 
         #endregion
