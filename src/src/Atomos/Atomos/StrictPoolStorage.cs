@@ -8,6 +8,7 @@ namespace Atomos.Atomos
     {
         #region Fields
 
+        private int _version;
         private List<T> _availableItems = new List<T>();
         private readonly HashSet<T> _usedItems = new HashSet<T>(); 
 
@@ -22,6 +23,8 @@ namespace Atomos.Atomos
 
         #endregion
 
+        #region Enumerator
+
         public IEnumerator<T> GetEnumerator()
         {
             return new Enumerator(this);
@@ -32,6 +35,8 @@ namespace Atomos.Atomos
             return new Enumerator(this);
         }
 
+        #endregion
+
         #region Storage Management
 
         public void Register(T item)
@@ -40,6 +45,7 @@ namespace Atomos.Atomos
                 throw new ArgumentException("Cannot register the same object twice", nameof(item));
 
             _availableItems.Add(item);
+            _version++;
         }
 
         public void Reset(bool destroyItems)
@@ -48,6 +54,17 @@ namespace Atomos.Atomos
                 DestroyAll();
             else
                 ReleaseAll();
+        }
+
+        public void SetCapacity(int capacity)
+        {
+            if (capacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(capacity));
+
+            List<T> availableItems = new List<T>(capacity);
+            availableItems.AddRange(_availableItems);
+            _availableItems = availableItems;
+            _version++;
         }
 
         #endregion
@@ -62,6 +79,7 @@ namespace Atomos.Atomos
             T item = _availableItems[_availableItems.Count - 1];
             _usedItems.Add(item);
             _availableItems.RemoveAt(_availableItems.Count - 1);
+            _version++;
 
             return item;
         }
@@ -69,34 +87,27 @@ namespace Atomos.Atomos
         public void Set(T item)
         {
             if (!_usedItems.Contains(item))
-                throw new ArgumentException("Cannot set an item not created by the pool when in Strict mode", nameof(item));
+                throw new ArgumentException("Failed to set an item already released or not created by the pool", nameof(item));
 
             _availableItems.Add(item);
             _usedItems.Remove(item);
+            _version++;
         }
 
         private void ReleaseAll()
         {
             _availableItems.AddRange(_usedItems);
             _usedItems.Clear();
+            _version++;
         }
 
         private void DestroyAll()
         {
             _availableItems.Clear();
             _usedItems.Clear();
+            _version++;
         }
 
         #endregion
-
-        public void SetCapacity(int capacity)
-        {
-            if (capacity < 0)
-                throw new ArgumentOutOfRangeException(nameof(capacity));
-
-            List<T> availableItems = new List<T>(capacity);
-            availableItems.AddRange(_availableItems);
-            _availableItems = availableItems;
-        }
     }
 }

@@ -57,6 +57,10 @@ namespace Atomos.Atomos
                     storage = new StrictPoolStorage<T>();
                     break;
 
+                case PoolingMode.Flexible:
+                    storage = new FlexiblePoolStorage<T>();
+                    break;
+
                 default:
                     throw new ArgumentException($"{mode} is not a valid pooling mode");
             }
