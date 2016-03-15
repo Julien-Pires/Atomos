@@ -3,6 +3,13 @@ using System.Collections.Generic;
 
 namespace Atomos.Atomos
 {
+    /// <summary>
+    /// Implements a generic object pool. The pool will automatically create new elements
+    /// when required. By default the pool return policy is "Strict", it means that a
+    /// pool can only accept element that has been created by the pool. "Flexible" mode allow
+    /// to return any object to the pool.
+    /// </summary>
+    /// <typeparam name="T">Type of pool elements</typeparam>
     public class Pool<T> : IDisposable where T : class
     {
         #region Fields
@@ -15,6 +22,9 @@ namespace Atomos.Atomos
 
         #region Properties
 
+        /// <summary>
+        /// Gets the number of available elements in the pool
+        /// </summary>
         public int Count
         {
             get { return _storage.Count; }
@@ -24,10 +34,19 @@ namespace Atomos.Atomos
 
         #region Constructors
 
+        /// <summary>
+        /// Initialize a new instance of Pool<T> with the specified parameters
+        /// </summary>
+        /// <param name="settings">Pool parameters</param>
         public Pool(PoolSettings<T>? settings = null) : this(settings, CreateStorage)
         {
         }
 
+        /// <summary>
+        /// Initialize a new instance of Pool<T> with the specified parameters and storage factory delegate
+        /// </summary>
+        /// <param name="settings">Pool parameter</param>
+        /// <param name="storageInitializer">Delegate used to initialize the pool storage</param>
         protected Pool(PoolSettings<T>? settings, Func<PoolSettings<T>, IPoolStorage<T>> storageInitializer)
         {
             if (storageInitializer == null)
@@ -72,6 +91,10 @@ namespace Atomos.Atomos
 
         #region Cleanup
 
+        /// <summary>
+        /// Resets the pool
+        /// </summary>
+        /// <param name="destroyItems">Used to indicates that elements of the pool must be destroyed</param>
         public void Reset(bool destroyItems = false)
         {
             _storage.Reset(destroyItems);
@@ -83,6 +106,9 @@ namespace Atomos.Atomos
             }
         }
 
+        /// <summary>
+        /// Disposes the pool
+        /// </summary>
         public void Dispose()
         {
             throw new NotImplementedException();
@@ -92,6 +118,10 @@ namespace Atomos.Atomos
 
         #region Pooling
 
+        /// <summary>
+        /// Gets an available element
+        /// </summary>
+        /// <returns>Return an element from the pool, if no elements are available a new one will be created</returns>
         public T Get()
         {
             T item = _storage.Get();
@@ -104,6 +134,10 @@ namespace Atomos.Atomos
             return item;
         }
 
+        /// <summary>
+        /// Returns an element to the pool
+        /// </summary>
+        /// <param name="item">Represents an element that must be returned</param>
         public void Set(T item)
         {
             if (item == null)
@@ -113,6 +147,10 @@ namespace Atomos.Atomos
             _storage.Set(item);
         }
 
+        /// <summary>
+        /// Returns a collection of elements to the pool
+        /// </summary>
+        /// <param name="items">The collection of elements that must be returned</param>
         public void Set(IEnumerable<T> items)
         {
             if (items == null)
