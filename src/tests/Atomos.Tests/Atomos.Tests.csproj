@@ -93,8 +93,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Pool\Pool.Generic.Test.Flexible.cs" />
+    <Compile Include="Pool\Pool.Generic.Test.Flexible.Reset.cs" />
     <Compile Include="Pool\Pool.Generic.Test.Set.cs" />
     <Compile Include="Pool\Pool.Generic.Test.Strict.cs" />
+    <Compile Include="Pool\Pool.Generic.Test.Strict.Reset.cs" />
     <Compile Include="Pool\Pool.Generic.Test.Strict.Set.cs" />
     <Compile Include="Pool\Pool.Test.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
