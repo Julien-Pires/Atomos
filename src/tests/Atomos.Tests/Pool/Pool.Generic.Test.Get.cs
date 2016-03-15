@@ -11,7 +11,7 @@ namespace Atomos.Tests.Pool
         }
 
 		[Fact]
-		public void Get_Multiple_Is_Different()
+		public void Get_Multiple_IsDifferent()
         {
             T itemOne = _pool.Get();
             T itemTwo = _pool.Get();

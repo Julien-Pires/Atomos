@@ -28,16 +28,19 @@ namespace Atomos.Atomos
         {
         }
 
-        protected Pool(PoolSettings<T>? settings, Func<PoolSettings<T>, IPoolStorage<T>> poolInitializer)
+        protected Pool(PoolSettings<T>? settings, Func<PoolSettings<T>, IPoolStorage<T>> storageInitializer)
         {
-            if (poolInitializer == null)
-                throw new ArgumentNullException(nameof(poolInitializer));
+            if (storageInitializer == null)
+                throw new ArgumentNullException(nameof(storageInitializer));
 
             PoolSettings<T> settingsValue = settings.HasValue ? settings.Value : default(PoolSettings<T>);
-            _initializer = _initializer ?? settingsValue.Initializer;
-            _reset = _reset ?? settingsValue.Reset;
-            _storage = poolInitializer(settingsValue);
+            _initializer = settingsValue.Initializer ?? _initializer;
+            _reset = settingsValue.Reset ?? _reset;
+            _storage = storageInitializer(settingsValue);
             _storage.SetCapacity(settingsValue.Capacity);
+
+            for (int i = 0; i < settingsValue.Capacity; i++)
+                _storage.Register(_initializer());
         }
 
         #endregion

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Atomos.Atomos
 {
-    internal sealed class StrictPoolStorage<T> : IPoolStorage<T> where T : class
+    internal sealed partial class StrictPoolStorage<T> : IPoolStorage<T> where T : class
     {
         #region Fields
 
@@ -24,12 +24,12 @@ namespace Atomos.Atomos
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return new Enumerator(this);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return new Enumerator(this);
         }
 
         #region Storage Management
@@ -44,15 +44,10 @@ namespace Atomos.Atomos
 
         public void Reset(bool destroyItems)
         {
-            if (!destroyItems)
-            {
-                foreach (T item in _usedItems)
-                    _availableItems.Add(item);
-            }
+            if (destroyItems)
+                DestroyAll();
             else
-                _availableItems.Clear();
-
-            _usedItems.Clear();
+                ReleaseAll();
         }
 
         #endregion
@@ -78,6 +73,18 @@ namespace Atomos.Atomos
 
             _availableItems.Add(item);
             _usedItems.Remove(item);
+        }
+
+        private void ReleaseAll()
+        {
+            _availableItems.AddRange(_usedItems);
+            _usedItems.Clear();
+        }
+
+        private void DestroyAll()
+        {
+            _availableItems.Clear();
+            _usedItems.Clear();
         }
 
         #endregion

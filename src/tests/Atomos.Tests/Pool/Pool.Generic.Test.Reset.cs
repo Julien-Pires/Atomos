@@ -11,7 +11,7 @@ namespace Atomos.Tests.Pool
         [InlineData(10)]
         [InlineData(100)]
         [InlineData(1000)]
-        public void Reset_NoClean(int itemCount)
+        public void Reset_NoDestroy(int itemCount)
         {
             for (int i = 0; i < itemCount; i++)
                 _pool.Get();
@@ -25,14 +25,14 @@ namespace Atomos.Tests.Pool
         [InlineData(0)]
         [InlineData(1000)]
         [InlineData(int.MaxValue)]
-        public void Reset_NoClean_WithCustomReset(int value)
+        public void Reset_NoDestroy_WithCustomReset(int value)
         {
             PoolSettings<T> settings = new PoolSettings<T> { Reset = c => c.Value = value };
             Pool<T> pool = new Pool<T>(settings);
-            _pool.Get();
-            _pool.Reset();
+            pool.Get();
+            pool.Reset();
 
-            Assert.Equal(value, _pool.Get().Value);
+            Assert.Equal(value, pool.Get().Value);
         }
 
         [Theory]
@@ -40,7 +40,7 @@ namespace Atomos.Tests.Pool
         [InlineData(10, 0)]
         [InlineData(100, 0)]
         [InlineData(1000, 0)]
-        public void Reset_CleanItems(int itemCount, int availableItems)
+        public void Reset_DestroyItems(int itemCount, int availableItems)
         {
             for (int i = 0; i < itemCount; i++)
                 _pool.Get();

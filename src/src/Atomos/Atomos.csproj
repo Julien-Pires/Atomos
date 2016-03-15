@@ -107,6 +107,7 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <Compile Include="Atomos\StrictPoolStorage.Enumerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Atomos\IPoolStorage.cs" />

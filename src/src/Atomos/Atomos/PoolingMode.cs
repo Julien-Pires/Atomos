@@ -2,7 +2,7 @@
 {
     public enum PoolingMode
     {
-        Flexible,
-        Strict
+        Strict = 0,
+        Flexible = 1
     }
 }

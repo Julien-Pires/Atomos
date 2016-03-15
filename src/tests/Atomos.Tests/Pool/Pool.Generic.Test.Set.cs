@@ -24,6 +24,15 @@ namespace Atomos.Tests.Pool
         }
 
         [Fact]
+        public void Set_SingleItemTwice_ThrowException()
+        {
+            T item = _pool.Get();
+            _pool.Set(item);
+
+            Assert.Throws<ArgumentException>(() => _pool.Set(item));
+        }
+
+        [Fact]
         public void Set_NullSingleItems_ThrowException()
         {
             Assert.Throws<ArgumentNullException>(() => _pool.Set((T)null));
@@ -43,6 +52,14 @@ namespace Atomos.Tests.Pool
             }
 
             Assert.Equal(count, _pool.Count);
+        }
+
+        [Fact]
+        public void Set_MultipleItemTwice_ThrowException()
+        {
+            T item = _pool.Get();
+            
+            Assert.Throws<ArgumentException>(() => _pool.Set(new []{ item, item }));
         }
 
         [Fact]
