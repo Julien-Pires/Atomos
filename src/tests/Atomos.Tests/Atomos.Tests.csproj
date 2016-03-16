@@ -99,6 +99,9 @@
     <Compile Include="Pool\Pool.Generic.Test.Strict.Reset.cs" />
     <Compile Include="Pool\Pool.Generic.Test.Strict.Set.cs" />
     <Compile Include="Pool\Pool.Test.cs" />
+    <Compile Include="Pool\SharedPool.Generic.Test.cs" />
+    <Compile Include="Pool\SharedPool.Generic.Test.Destroy.cs" />
+    <Compile Include="Pool\SharedPool.Generic.Test.DestroyAll.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -107,6 +110,7 @@
     <Compile Include="Pool\Pool.Generic.Test.cs" />
     <Compile Include="Pool\Pool.Generic.Test.Constructors.cs" />
     <Compile Include="Pool\Pool.Generic.Test.Reset.cs" />
+    <Compile Include="Pool\SharedPool.Generic.Test.Get.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\src\Atomos\Atomos.csproj">
