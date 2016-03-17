@@ -111,7 +111,11 @@ namespace Atomos.Atomos
         /// </summary>
         public void Dispose()
         {
-            throw new NotImplementedException();
+            Dispose(true);
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
         }
 
         #endregion
