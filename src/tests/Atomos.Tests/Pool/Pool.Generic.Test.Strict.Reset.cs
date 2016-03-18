@@ -14,11 +14,11 @@ namespace Atomos.Tests.Pool
         public void Reset_NoDestroy(int itemCount)
         {
             for (int i = 0; i < itemCount; i++)
-                _pool.Get();
+                Pool.Get();
 
-            _pool.Reset();
+            Pool.Reset();
 
-            Assert.Equal(itemCount, _pool.Count);
+            Assert.Equal(itemCount, Pool.Count);
         }
 
         [Theory]

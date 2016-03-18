@@ -16,26 +16,26 @@ namespace Atomos.Tests.Pool
         {
             for (int i = 0; i < itemsCount; i++)
             {
-                T item = _pool.Get();
-                _pool.Set(item);
+                T item = Pool.Get();
+                Pool.Set(item);
             }
 
-            Assert.Equal(count, _pool.Count);
+            Assert.Equal(count, Pool.Count);
         }
 
         [Fact]
         public void Set_SingleItemTwice_ThrowException()
         {
-            T item = _pool.Get();
-            _pool.Set(item);
+            T item = Pool.Get();
+            Pool.Set(item);
 
-            Assert.Throws<ArgumentException>(() => _pool.Set(item));
+            Assert.Throws<ArgumentException>(() => Pool.Set(item));
         }
 
         [Fact]
         public void Set_NullSingleItems_ThrowException()
         {
-            Assert.Throws<ArgumentNullException>(() => _pool.Set((T)null));
+            Assert.Throws<ArgumentNullException>(() => Pool.Set((T)null));
         }
 
         [Theory]
@@ -47,25 +47,25 @@ namespace Atomos.Tests.Pool
         {
             for(int i = 0; i < itemsCount; i++)
             {
-                T[] items = { _pool.Get() };
-                _pool.Set(items);
+                T[] items = { Pool.Get() };
+                Pool.Set(items);
             }
 
-            Assert.Equal(count, _pool.Count);
+            Assert.Equal(count, Pool.Count);
         }
 
         [Fact]
         public void Set_MultipleItemTwice_ThrowException()
         {
-            T item = _pool.Get();
+            T item = Pool.Get();
             
-            Assert.Throws<ArgumentException>(() => _pool.Set(new []{ item, item }));
+            Assert.Throws<ArgumentException>(() => Pool.Set(new []{ item, item }));
         }
 
         [Fact]
         public void Set_NullMultipleItems_ThrowException()
         {
-            Assert.Throws<ArgumentNullException>(() => _pool.Set((IEnumerable<T>)null));
+            Assert.Throws<ArgumentNullException>(() => Pool.Set((IEnumerable<T>)null));
         }
 
         [Theory]
@@ -77,12 +77,12 @@ namespace Atomos.Tests.Pool
         {
             List<T> itemsList = new List<T>(itemsCount);
             for (int i = 0; i < itemsCount; i++)
-                itemsList.Add(_pool.Get());
+                itemsList.Add(Pool.Get());
 
             for(int i = 0; i < itemsCount; i++)
-                _pool.Set(itemsList[i]);
+                Pool.Set(itemsList[i]);
 
-            Assert.Equal(count, _pool.Count);
+            Assert.Equal(count, Pool.Count);
         }
 
         [Theory]
@@ -94,11 +94,11 @@ namespace Atomos.Tests.Pool
         {
             List<T> itemsList = new List<T>(itemsCount);
             for (int i = 0; i < itemsCount; i++)
-                itemsList.Add(_pool.Get());
+                itemsList.Add(Pool.Get());
 
-            _pool.Set(itemsList);
+            Pool.Set(itemsList);
 
-            Assert.Equal(count, _pool.Count);
+            Assert.Equal(count, Pool.Count);
         }
     }
 }

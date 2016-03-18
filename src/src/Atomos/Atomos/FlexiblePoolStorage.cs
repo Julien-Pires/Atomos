@@ -31,7 +31,9 @@ namespace Atomos.Atomos
                 throw new ArgumentOutOfRangeException(nameof(capacity));
 
             List<T> availableItems = new List<T>(capacity);
-            availableItems.AddRange(_availableItems);
+            int minCount = Math.Min(capacity, _availableItems.Count);
+            for (int i = 0; i < minCount; i++)
+                availableItems.Add(_availableItems[i]);
             _availableItems = availableItems;
 
             _availableItemsTable.Clear();

@@ -7,14 +7,14 @@ namespace Atomos.Tests.Pool
         [Fact]
         public void Get_Success()
         {
-            Assert.NotNull(_pool.Get());
+            Assert.NotNull(Pool.Get());
         }
 
 		[Fact]
 		public void Get_Multiple_IsDifferent()
         {
-            T itemOne = _pool.Get();
-            T itemTwo = _pool.Get();
+            T itemOne = Pool.Get();
+            T itemTwo = Pool.Get();
 
             Assert.NotEqual(itemOne, itemTwo);
         }

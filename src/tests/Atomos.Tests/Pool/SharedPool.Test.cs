@@ -1,10 +1,10 @@
 ﻿namespace Atomos.Tests.Pool
 {
-    public class SharedPool : SharedPool_Generic_Test<SharedPoolItem>
+    public class SharedPool_Test_PoolItem : SharedPool_Generic_Test<PoolItem>
     {
     }
 
-    public class SharedPoolItem
+    public class PoolItem
     {
     }
 }

@@ -14,11 +14,11 @@ namespace Atomos.Tests.Pool
         public void Reset_DestroyItems(int itemCount, int availableItems)
         {
             for (int i = 0; i < itemCount; i++)
-                _pool.Get();
+                Pool.Get();
 
-            _pool.Reset(true);
+            Pool.Reset(true);
 
-            Assert.Equal(availableItems, _pool.Count);
+            Assert.Equal(availableItems, Pool.Count);
         }
     }
 }

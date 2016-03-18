@@ -10,9 +10,9 @@ namespace Atomos.Tests.Pool
         [InlineData(5000)]
         public void Set_UnknownSingleItem(int value)
         {
-            _pool.Set(new T { Value = value });
+            Pool.Set(new T { Value = value });
 
-            Assert.Equal(value, _pool.Get().Value);
+            Assert.Equal(value, Pool.Get().Value);
         }
 
         [Theory]
@@ -21,9 +21,9 @@ namespace Atomos.Tests.Pool
         [InlineData(5000)]
         public void Set_UnknownMultipleItems(int value)
         {
-            _pool.Set(new[] { new T { Value = value } });
+            Pool.Set(new[] { new T { Value = value } });
 
-            Assert.Equal(value, _pool.Get().Value);
+            Assert.Equal(value, Pool.Get().Value);
         }
     }
 }

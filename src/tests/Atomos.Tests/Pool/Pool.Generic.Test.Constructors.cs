@@ -11,21 +11,22 @@ namespace Atomos.Tests.Pool
 		[Fact]
         public void Constructor_No_Capacity()
         {
-            Pool<T> pool = new Pool<T>();
+            PoolSettings<T> settings = new PoolSettings<T> { Mode = Mode };
+            Pool<T> pool = new Pool<T>(settings);
 
             Assert.Equal(0, pool.Count);
         }
 
         [Theory]
-		[InlineData(0, 0)]
-        [InlineData(10, 10)]
-        [InlineData(100, 100)]
-        public void Constructor_InitialCapacity(int capacity, int count)
+		[InlineData(0)]
+        [InlineData(10)]
+        [InlineData(100)]
+        public void Constructor_InitialCapacity(int capacity)
         {
-            PoolSettings<T> settings = new PoolSettings<T> { Capacity = capacity };
+            PoolSettings<T> settings = new PoolSettings<T> { Capacity = capacity, Mode = Mode };
             Pool <T> pool = new Pool<T>(settings);
 
-            Assert.Equal(count, pool.Count);
+            Assert.Equal(capacity, pool.Count);
         }
 
         [Theory]
@@ -33,7 +34,7 @@ namespace Atomos.Tests.Pool
         [InlineData(int.MinValue)]
         public void Constructor_NegativeCapacity_ThrowException(int capacity)
         {
-            PoolSettings<T> settings = new PoolSettings<T> { Capacity = capacity };
+            PoolSettings<T> settings = new PoolSettings<T> { Capacity = capacity, Mode = Mode };
 
             Assert.Throws<ArgumentOutOfRangeException>(() => new Pool<T>(settings));
         }
@@ -41,7 +42,8 @@ namespace Atomos.Tests.Pool
 		[Fact]
 		public void Constructor_DefaultInitializer()
         {
-            Pool<T> pool = new Pool<T>();
+            PoolSettings<T> settings = new PoolSettings<T> { Mode = Mode };
+            Pool<T> pool = new Pool<T>(settings);
 
             Assert.Equal(0, pool.Get().Value);
         }
@@ -52,7 +54,7 @@ namespace Atomos.Tests.Pool
         [InlineData(int.MinValue)]
         public void Constructor_CustomInitializer(int value)
         {
-            PoolSettings<T> settings = new PoolSettings<T> { Initializer = () => new T() { Value = value } };
+            PoolSettings<T> settings = new PoolSettings<T> { Initializer = () => new T() { Value = value }, Mode = Mode };
             Pool<T> pool = new Pool<T>(settings);
 
             Assert.Equal(value, pool.Get().Value);
@@ -61,7 +63,8 @@ namespace Atomos.Tests.Pool
 		[Fact]
 		public void Constructor_DefaultReset()
         {
-            Pool<T> pool = new Pool<T>();
+            PoolSettings<T> settings = new PoolSettings<T> { Mode = Mode };
+            Pool<T> pool = new Pool<T>(settings);
             T item = pool.Get();
             pool.Set(item);
 
@@ -75,7 +78,7 @@ namespace Atomos.Tests.Pool
         [InlineData(int.MaxValue)]
         public void Constructor_CustomReset(int value)
         {
-            PoolSettings<T> settings = new PoolSettings<T> { Reset = c => c.Value = value };
+            PoolSettings<T> settings = new PoolSettings<T> { Reset = c => c.Value = value, Mode = Mode };
             Pool<T> pool = new Pool<T>(settings);
             T item = pool.Get();
             pool.Set(item);

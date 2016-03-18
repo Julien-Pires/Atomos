@@ -6,15 +6,22 @@ namespace Atomos.Tests.Pool
     {
         #region Fields
 
-        protected readonly Pool<T> _pool;
+        protected readonly Pool<T> Pool;
+
+        #endregion
+
+        #region Properties
+
+        protected PoolingMode Mode { get; }
 
         #endregion
 
         #region Constructors
 
-        protected Pool_Generic_Test(PoolSettings<T>? settings = null)
+        protected Pool_Generic_Test(PoolingMode mode)
         {
-            _pool = new Pool<T>(settings);
+            Pool = new Pool<T>(new PoolSettings<T> { Mode = mode });
+            Mode = mode;
         }
 
         #endregion

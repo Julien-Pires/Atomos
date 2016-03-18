@@ -9,13 +9,13 @@ namespace Atomos.Tests.Pool
         [Fact]
         public void Set_UnknownSingleItem_ThrowException()
         {
-            Assert.Throws<ArgumentException>(() => _pool.Set(new T()));
+            Assert.Throws<ArgumentException>(() => Pool.Set(new T()));
         }
 
         [Fact]
         public void Set_UnknownMultipleItems_ThrowException()
         {
-            Assert.Throws<ArgumentException>(() => _pool.Set(new []{ new T() }));
+            Assert.Throws<ArgumentException>(() => Pool.Set(new []{ new T() }));
         }
     }
 }

@@ -18,15 +18,15 @@ namespace Atomos.Tests.Pool
             List<T> items = new List<T>();
             for (int i = 0; i < itemCount; i++)
             {
-                T item = _pool.Get();
+                T item = Pool.Get();
                 if ((i % step) == 0)
                     items.Add(item);
             }
 
-            _pool.Set(items);
-            _pool.Reset();
+            Pool.Set(items);
+            Pool.Reset();
 
-            Assert.Equal(count, _pool.Count);
+            Assert.Equal(count, Pool.Count);
         }
     }
 }
