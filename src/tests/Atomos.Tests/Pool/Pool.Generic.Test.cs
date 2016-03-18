@@ -2,7 +2,7 @@
 
 namespace Atomos.Tests.Pool
 {
-    public abstract partial class Pool_Generic_Test<T> where T : Pool_Base_Item_Test, new()
+    public abstract partial class Pool_Generic_Test<T> where T : class, IPoolItem_Test, new()
     {
         #region Fields
 
@@ -25,10 +25,5 @@ namespace Atomos.Tests.Pool
         }
 
         #endregion
-    }
-
-    public abstract class Pool_Base_Item_Test
-    {
-        public int Value { get; set; }
     }
 }
