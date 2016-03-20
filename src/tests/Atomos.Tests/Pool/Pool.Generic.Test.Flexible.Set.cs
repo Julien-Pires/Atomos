@@ -12,7 +12,7 @@ namespace Atomos.Tests.Pool
         {
             Pool.Set(new T { Value = value });
 
-            Assert.Equal(value, Pool.Get().Value);
+            Assert.Equal(value, ((T)Pool.Get()).Value);
         }
 
         [Theory]
@@ -23,7 +23,7 @@ namespace Atomos.Tests.Pool
         {
             Pool.Set(new[] { new T { Value = value } });
 
-            Assert.Equal(value, Pool.Get().Value);
+            Assert.Equal(value, ((T)Pool.Get()).Value);
         }
     }
 }

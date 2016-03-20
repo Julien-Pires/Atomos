@@ -1,4 +1,6 @@
-﻿using Xunit;
+﻿using Atomos.Atomos;
+
+using Xunit;
 
 namespace Atomos.Tests.Pool
 {
@@ -7,16 +9,17 @@ namespace Atomos.Tests.Pool
         [Fact]
         public void Get_Success()
         {
-            Assert.NotNull(Pool.Get());
+            Assert.NotNull(Pool.Get().Item);
         }
 
 		[Fact]
 		public void Get_Multiple_IsDifferent()
         {
-            T itemOne = Pool.Get();
-            T itemTwo = Pool.Get();
+            PoolItem<T> itemOne = Pool.Get();
+            PoolItem<T> itemTwo = Pool.Get();
 
             Assert.NotEqual(itemOne, itemTwo);
+            Assert.NotEqual(itemOne.Item, itemTwo.Item);
         }
     }
 }

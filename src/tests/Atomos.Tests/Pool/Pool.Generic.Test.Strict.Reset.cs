@@ -32,7 +32,7 @@ namespace Atomos.Tests.Pool
             pool.Get();
             pool.Reset();
 
-            Assert.Equal(value, pool.Get().Value);
+            Assert.Equal(value, ((T)pool.Get()).Value);
         }
     }
 }

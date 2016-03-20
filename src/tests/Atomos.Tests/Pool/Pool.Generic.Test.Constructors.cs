@@ -45,7 +45,7 @@ namespace Atomos.Tests.Pool
             PoolSettings<T> settings = new PoolSettings<T> { Mode = Mode };
             Pool<T> pool = new Pool<T>(settings);
 
-            Assert.Equal(0, pool.Get().Value);
+            Assert.Equal(0, ((T)pool.Get()).Value);
         }
 
 		[Theory]
@@ -57,7 +57,7 @@ namespace Atomos.Tests.Pool
             PoolSettings<T> settings = new PoolSettings<T> { Initializer = () => new T() { Value = value }, Mode = Mode };
             Pool<T> pool = new Pool<T>(settings);
 
-            Assert.Equal(value, pool.Get().Value);
+            Assert.Equal(value, ((T)pool.Get()).Value);
         }
 
 		[Fact]
@@ -68,7 +68,7 @@ namespace Atomos.Tests.Pool
             T item = pool.Get();
             pool.Set(item);
 
-            Assert.Equal(0, pool.Get().Value);
+            Assert.Equal(0, ((T)pool.Get()).Value);
         }
 
         [Theory]
@@ -83,7 +83,7 @@ namespace Atomos.Tests.Pool
             T item = pool.Get();
             pool.Set(item);
 
-            Assert.Equal(value, pool.Get().Value);
+            Assert.Equal(value, ((T)pool.Get()).Value);
         }
     }
 }

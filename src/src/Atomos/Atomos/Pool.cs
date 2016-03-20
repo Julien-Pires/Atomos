@@ -126,16 +126,16 @@ namespace Atomos.Atomos
         /// Gets an available element
         /// </summary>
         /// <returns>Return an element from the pool, if no elements are available a new one will be created</returns>
-        public T Get()
+        public PoolItem<T> Get()
         {
             T item = _storage.Get();
             if (item != null)
-                return item;
+                return new PoolItem<T>(item, this);
 
             _storage.Register(_initializer());
             item = _storage.Get();
 
-            return item;
+            return new PoolItem<T>(item, this);
         }
 
         /// <summary>

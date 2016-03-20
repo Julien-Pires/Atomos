@@ -94,6 +94,8 @@
   <ItemGroup>
     <Compile Include="Pool\Pool.Generic.Test.Flexible.cs" />
     <Compile Include="Pool\Pool.Generic.Test.Flexible.Reset.cs" />
+    <Compile Include="Pool\Pool.Generic.Test.PoolItem.Cast.cs" />
+    <Compile Include="Pool\Pool.Generic.Test.PoolItem.Dispose.cs" />
     <Compile Include="Pool\Pool.Generic.Test.Set.cs" />
     <Compile Include="Pool\Pool.Generic.Test.Strict.cs" />
     <Compile Include="Pool\Pool.Generic.Test.Strict.Reset.cs" />

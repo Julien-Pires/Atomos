@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 
+using Atomos.Atomos;
+
 using Xunit;
 
 namespace Atomos.Tests.Pool
@@ -16,7 +18,7 @@ namespace Atomos.Tests.Pool
         {
             for (int i = 0; i < itemsCount; i++)
             {
-                T item = Pool.Get();
+                PoolItem<T> item = Pool.Get();
                 Pool.Set(item);
             }
 
@@ -26,7 +28,7 @@ namespace Atomos.Tests.Pool
         [Fact]
         public void Set_SingleItemTwice_ThrowException()
         {
-            T item = Pool.Get();
+            PoolItem<T> item = Pool.Get();
             Pool.Set(item);
 
             Assert.Throws<ArgumentException>(() => Pool.Set(item));
@@ -75,7 +77,7 @@ namespace Atomos.Tests.Pool
         [InlineData(50000, 50000)]
         public void Set_SingleItems_TotalAvailable(int itemsCount, int count)
         {
-            List<T> itemsList = new List<T>(itemsCount);
+            List<PoolItem<T>> itemsList = new List<PoolItem<T>>(itemsCount);
             for (int i = 0; i < itemsCount; i++)
                 itemsList.Add(Pool.Get());
 
