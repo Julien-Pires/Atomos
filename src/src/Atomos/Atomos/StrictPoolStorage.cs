@@ -50,12 +50,22 @@ namespace Atomos.Atomos
             _version++;
         }
 
-        public void Reset(bool destroyItems)
+        public void ResetItems()
         {
-            if (destroyItems)
-                DestroyAll();
-            else
-                ReleaseAll();
+            _availableItems.AddRange(_usedItems);
+            _availableItemsSet.UnionWith(_usedItems);
+            _usedItems.Clear();
+
+            _version++;
+        }
+
+        public void DestroyItems()
+        {
+            _availableItems.Clear();
+            _availableItemsSet.Clear();
+            _usedItems.Clear();
+
+            _version++;
         }
 
         public void SetCapacity(int capacity)
@@ -104,24 +114,6 @@ namespace Atomos.Atomos
             _availableItems.Add(item);
             _availableItemsSet.Add(item);
             _usedItems.Remove(item);
-
-            _version++;
-        }
-
-        private void ReleaseAll()
-        {
-            _availableItems.AddRange(_usedItems);
-            _availableItemsSet.UnionWith(_usedItems);
-            _usedItems.Clear();
-
-            _version++;
-        }
-
-        private void DestroyAll()
-        {
-            _availableItems.Clear();
-            _availableItemsSet.Clear();
-            _usedItems.Clear();
 
             _version++;
         }

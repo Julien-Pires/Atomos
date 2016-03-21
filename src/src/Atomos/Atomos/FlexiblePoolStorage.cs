@@ -47,11 +47,12 @@ namespace Atomos.Atomos
             Set(item);
         }
 
-        public void Reset(bool destroyItems)
+        public void ResetItems()
         {
-            if (!destroyItems)
-                return;
+        }
 
+        public void DestroyItems()
+        {
             _availableItems.Clear();
             _availableItemsTable.Clear();
             _version++;

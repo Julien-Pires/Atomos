@@ -20,5 +20,15 @@ namespace Atomos.Tests.Pool
 
             Assert.Equal(availableItems, Pool.Count);
         }
+
+        [Fact]
+        public void Reset_DisposeItems_WhenDestroyed()
+        {
+            PoolItem<T> item = Pool.Get();
+            Pool.Set(item);
+            Pool.Reset(true);
+
+            Assert.True(((T)item).IsDisposed);
+        }
     }
 }

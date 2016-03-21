@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Collections.Generic;
 
 namespace Atomos.Atomos
@@ -14,9 +15,14 @@ namespace Atomos.Atomos
     {
         #region Fields
 
+        private static readonly Action<T> EmptyAction = c => { };
+        private static readonly Action<T> DisposeAction = c => (c as IDisposable).Dispose();
+
         private IPoolStorage<T> _storage;
+        private bool _isDisposed;
         private readonly Func<T> _initializer = New<T>.Create;
-        private readonly Action<T> _reset = c => { };
+        private readonly Action<T> _reset;
+        private readonly Action<T> _dispose;
 
         #endregion
 
@@ -54,10 +60,11 @@ namespace Atomos.Atomos
 
             PoolSettings<T> settingsValue = settings.HasValue ? settings.Value : default(PoolSettings<T>);
             _initializer = settingsValue.Initializer ?? _initializer;
-            _reset = settingsValue.Reset ?? _reset;
+            _reset = settingsValue.Reset ?? EmptyAction;
+            _dispose = (typeof(IDisposable).GetTypeInfo().IsAssignableFrom(typeof(T).GetTypeInfo())) ? DisposeAction : EmptyAction;
+
             _storage = storageInitializer(settingsValue);
             _storage.SetCapacity(settingsValue.Capacity);
-
             for (int i = 0; i < settingsValue.Capacity; i++)
                 _storage.Register(_initializer());
         }
@@ -97,13 +104,16 @@ namespace Atomos.Atomos
         /// <param name="destroyItems">Used to indicates that elements of the pool must be destroyed</param>
         public void Reset(bool destroyItems = false)
         {
-            _storage.Reset(destroyItems);
+            CheckDisposeState();
 
-            if (!destroyItems)
-            {
-                foreach (T item in _storage)
-                    _reset(item);
-            }
+            _storage.ResetItems();
+
+            Action<T> resetAction = destroyItems ? _dispose : _reset;
+            foreach (T item in _storage)
+                resetAction(item);
+
+            if (destroyItems)
+                _storage.DestroyItems();
         }
 
         /// <summary>
@@ -111,11 +121,26 @@ namespace Atomos.Atomos
         /// </summary>
         public void Dispose()
         {
+            if (_isDisposed)
+                return;
+
             Dispose(true);
+            _isDisposed = true;
         }
 
+        /// <summary>
+        /// Disposes the pool
+        /// </summary>
+        /// <param name="disposing">Indicates that the method is called from the IDisposable.Dispose() method</param>
         protected virtual void Dispose(bool disposing)
         {
+            Reset(true);
+        }
+
+        private void CheckDisposeState()
+        {
+            if(_isDisposed)
+                throw new ObjectDisposedException(ToString());
         }
 
         #endregion
@@ -128,6 +153,8 @@ namespace Atomos.Atomos
         /// <returns>Return an element from the pool, if no elements are available a new one will be created</returns>
         public PoolItem<T> Get()
         {
+            CheckDisposeState();
+
             T item = _storage.Get();
             if (item != null)
                 return new PoolItem<T>(item, this);
@@ -144,6 +171,8 @@ namespace Atomos.Atomos
         /// <param name="item">Represents an element that must be returned</param>
         public void Set(T item)
         {
+            CheckDisposeState();
+
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
 
@@ -157,6 +186,8 @@ namespace Atomos.Atomos
         /// <param name="items">The collection of elements that must be returned</param>
         public void Set(IEnumerable<T> items)
         {
+            CheckDisposeState();
+
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 

@@ -32,10 +32,21 @@ namespace Atomos.Atomos
         void Register(T item);
 
         /// <summary>
-        /// Resets the storage
+        /// Resets the storage items state
         /// </summary>
-        /// <param name="destroyItems">Indicates that elements must be destroyed</param>
-        void Reset(bool destroyItems);
+        /// <remarks>
+        /// This method must only be used to reset the internal items state (eg: mark items as available)
+        /// </remarks>
+        void ResetItems();
+
+        /// <summary>
+        /// Destroys items in the storage
+        /// </summary>
+        /// <remarks>
+        /// This method must only be used to destroy items in the storage to make it as if it was a freshly 
+        /// created instance
+        /// </remarks>
+        void DestroyItems();
 
         /// <summary>
         /// Gets an available element
