@@ -2,6 +2,10 @@
 
 namespace Atomos.Atomos
 {
+    /// <summary>
+    /// Represents a wrapper around a pool item to ease item release
+    /// </summary>
+    /// <typeparam name="T">Type of pool item</typeparam>
     public struct PoolItem<T> : IDisposable where T : class
     {
         #region Fields
@@ -13,6 +17,9 @@ namespace Atomos.Atomos
 
         #region Properties
 
+        /// <summary>
+        /// Gets the item value
+        /// </summary>
         public T Item { get; }
 
         #endregion
@@ -30,6 +37,10 @@ namespace Atomos.Atomos
 
         #region Operators
 
+        /// <summary>
+        /// Cast the current instance to return the wrapped item
+        /// </summary>
+        /// <param name="wrapper">Current PoolItem instance</param>
         public static implicit operator T(PoolItem<T> wrapper)
         {
             if (wrapper._isDisposed)
@@ -42,6 +53,9 @@ namespace Atomos.Atomos
 
         #region Release
 
+        /// <summary>
+        /// Disposes the wrapper and release the item to the pool
+        /// </summary>
         public void Dispose()
         {
             if (_isDisposed)
