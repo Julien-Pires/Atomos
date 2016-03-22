@@ -20,7 +20,7 @@ namespace Atomos.Atomos
 
         private IPoolStorage<T> _storage;
         private bool _isDisposed;
-        private readonly Func<T> _initializer = New<T>.Create;
+        private readonly Func<T> _initializer;
         private readonly Action<T> _reset;
         private readonly Action<T> _dispose;
 
@@ -59,7 +59,7 @@ namespace Atomos.Atomos
                 throw new ArgumentNullException(nameof(storageInitializer));
 
             PoolSettings<T> settingsValue = settings.HasValue ? settings.Value : default(PoolSettings<T>);
-            _initializer = settingsValue.Initializer ?? _initializer;
+            _initializer = settingsValue.Initializer ?? New<T>.Create;
             _reset = settingsValue.Reset ?? EmptyAction;
             _dispose = (typeof(IDisposable).GetTypeInfo().IsAssignableFrom(typeof(T).GetTypeInfo())) ? DisposeAction : EmptyAction;
 
