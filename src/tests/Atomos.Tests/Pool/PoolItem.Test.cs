@@ -1,8 +1,10 @@
 ﻿using System;
 
+using Atomos.Atomos;
+
 namespace Atomos.Tests.Pool
 {
-    public interface IPoolItem_Test
+    public interface IPoolItem_Test : IPoolItem, IDisposable
     {
         #region Properties
 
@@ -10,14 +12,18 @@ namespace Atomos.Tests.Pool
 
         bool IsDisposed { get; }
 
+        bool IsReset { get; }
+
         #endregion
     }
 
-    public class PoolItem_Test : IPoolItem_Test, IDisposable
+    public class PoolItem_Test : IPoolItem_Test
     {
         #region Properties
 
         public int Value { get; set; }
+
+        public bool IsReset { get; private set; }
 
         public bool IsDisposed { get; private set; }
 
@@ -28,6 +34,11 @@ namespace Atomos.Tests.Pool
         public void Dispose()
         {
             IsDisposed = true;
+        }
+
+        public void Reset()
+        {
+            IsReset = true;
         }
 
         #endregion

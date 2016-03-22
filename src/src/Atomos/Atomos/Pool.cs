@@ -17,6 +17,7 @@ namespace Atomos.Atomos
 
         private static readonly Action<T> EmptyAction = c => { };
         private static readonly Action<T> DisposeAction = c => (c as IDisposable).Dispose();
+        private static readonly Action<T> ResetAction = c => (c as IPoolItem).Reset();
 
         private IPoolStorage<T> _storage;
         private bool _isDisposed;
@@ -40,6 +41,11 @@ namespace Atomos.Atomos
 
         #region Constructors
 
+        static Pool()
+        {
+            ResetAction = (typeof(IPoolItem).GetTypeInfo().IsAssignableFrom(typeof(T).GetTypeInfo())) ? ResetAction : EmptyAction;
+        }
+
         /// <summary>
         /// Initialize a new instance of Pool<T> with the specified parameters
         /// </summary>
@@ -60,7 +66,7 @@ namespace Atomos.Atomos
 
             PoolSettings<T> settingsValue = settings.HasValue ? settings.Value : default(PoolSettings<T>);
             _initializer = settingsValue.Initializer ?? New<T>.Create;
-            _reset = settingsValue.Reset ?? EmptyAction;
+            _reset = settingsValue.Reset ?? ResetAction;
             _dispose = (typeof(IDisposable).GetTypeInfo().IsAssignableFrom(typeof(T).GetTypeInfo())) ? DisposeAction : EmptyAction;
 
             _storage = storageInitializer(settingsValue);
