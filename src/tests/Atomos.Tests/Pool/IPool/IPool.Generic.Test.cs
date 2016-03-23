@@ -4,7 +4,7 @@ using Atomos.Atomos;
 
 namespace Atomos.Tests.Pool
 {
-    public abstract partial class Pool_Generic_Test<TPool, T>
+    public abstract partial class IPool_Generic_Test<TPool, T>
         where TPool : IPool<T>
         where T : class, IPoolItem_Test, new()
     {
@@ -22,7 +22,7 @@ namespace Atomos.Tests.Pool
 
         #region Constructors
 
-        protected Pool_Generic_Test(Func<PoolSettings<T>, TPool> factory, PoolingMode mode)
+        protected IPool_Generic_Test(Func<PoolSettings<T>, TPool> factory, PoolingMode mode)
         {
             Pool = factory(new PoolSettings<T> { Mode = mode });
             Mode = mode;

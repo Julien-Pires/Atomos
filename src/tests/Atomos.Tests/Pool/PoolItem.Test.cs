@@ -1,22 +1,5 @@
-﻿using System;
-
-using Atomos.Atomos;
-
-namespace Atomos.Tests.Pool
+﻿namespace Atomos.Tests.Pool
 {
-    public interface IPoolItem_Test : IPoolItem, IDisposable
-    {
-        #region Properties
-
-        int Value { get; set; }
-
-        bool IsDisposed { get; }
-
-        bool IsReset { get; }
-
-        #endregion
-    }
-
     public class PoolItem_Test : IPoolItem_Test
     {
         #region Properties
