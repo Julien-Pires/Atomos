@@ -4,7 +4,7 @@ using Xunit;
 
 namespace Atomos.Tests.Pool
 {
-    public abstract partial class Pool_Generic_Test_Strict<T>
+    public abstract partial class Pool_Generic_Test_Strict<TPool, T>
     {
         [Fact]
         public void Set_UnknownSingleItem_ThrowException()

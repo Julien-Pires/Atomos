@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Atomos.Tests.Pool
 {
-    public abstract partial class Pool_Generic_Test<T>
+    public abstract partial class Pool_Generic_Test<TPool, T>
     {
         [Theory]
         [InlineData(0, 0)]

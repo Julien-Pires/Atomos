@@ -2,7 +2,7 @@
 
 namespace Atomos.Tests.Pool
 {
-    public abstract partial class Pool_Generic_Test_Flexible<T>
+    public abstract partial class Pool_Generic_Test_Flexible<TPool, T>
     {
 		[Theory]
 		[InlineData(10)]

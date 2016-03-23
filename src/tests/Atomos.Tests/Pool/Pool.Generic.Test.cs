@@ -1,26 +1,30 @@
-﻿using Atomos.Atomos;
+﻿using System;
+
+using Atomos.Atomos;
 
 namespace Atomos.Tests.Pool
 {
-    public abstract partial class Pool_Generic_Test<T> where T : class, IPoolItem_Test, new()
+    public abstract partial class Pool_Generic_Test<TPool, T>
+        where TPool : IPool<T>
+        where T : class, IPoolItem_Test, new()
     {
         #region Fields
 
-        protected readonly Pool<T> Pool;
+        protected readonly TPool Pool;
 
         #endregion
 
         #region Properties
 
-        protected PoolingMode Mode { get; }
+        public PoolingMode Mode { get; }
 
         #endregion
 
         #region Constructors
 
-        protected Pool_Generic_Test(PoolingMode mode)
+        protected Pool_Generic_Test(Func<PoolSettings<T>, TPool> factory, PoolingMode mode)
         {
-            Pool = new Pool<T>(new PoolSettings<T> { Mode = mode });
+            Pool = factory(new PoolSettings<T> { Mode = mode });
             Mode = mode;
         }
 

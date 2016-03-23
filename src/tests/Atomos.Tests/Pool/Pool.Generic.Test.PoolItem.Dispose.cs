@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Atomos.Tests.Pool
 {
-    public abstract partial class Pool_Generic_Test<T>
+    public abstract partial class Pool_Generic_Test<TPool, T>
     {
         [Fact]
         public void Dispose_Item_IsAvailable()

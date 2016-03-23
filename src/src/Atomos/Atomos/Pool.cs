@@ -11,7 +11,7 @@ namespace Atomos.Atomos
     /// to return any object to the pool.
     /// </summary>
     /// <typeparam name="T">Type of pool elements</typeparam>
-    public class Pool<T> : IDisposable where T : class
+    public class Pool<T> : IPool<T> where T : class
     {
         #region Fields
 
