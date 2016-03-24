@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Atomos.Atomos
+namespace Atomos
 {
     /// <summary>
     /// Represents a pool storage used to store elements

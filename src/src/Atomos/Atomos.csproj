@@ -107,21 +107,21 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <Compile Include="Atomos\FlexiblePoolStorage.cs" />
-    <Compile Include="Atomos\FlexiblePoolStorage.Enumerator.cs" />
-    <Compile Include="Atomos\IPool.cs" />
-    <Compile Include="Atomos\IPoolItem.cs" />
-    <Compile Include="Atomos\PoolItem.cs" />
-    <Compile Include="Atomos\SharedPool.cs" />
-    <Compile Include="Atomos\StrictPoolStorage.Enumerator.cs" />
+    <Compile Include="Atomos\Pool\FlexiblePoolStorage.cs" />
+    <Compile Include="Atomos\Pool\FlexiblePoolStorage.Enumerator.cs" />
+    <Compile Include="Atomos\Pool\IPool.cs" />
+    <Compile Include="Atomos\Pool\IPoolItem.cs" />
+    <Compile Include="Atomos\Pool\PoolItem.cs" />
+    <Compile Include="Atomos\Pool\SharedPool.cs" />
+    <Compile Include="Atomos\Pool\StrictPoolStorage.Enumerator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Atomos\IPoolStorage.cs" />
+    <Compile Include="Atomos\Pool\IPoolStorage.cs" />
     <Compile Include="Atomos\New.cs" />
-    <Compile Include="Atomos\Pool.cs" />
-    <Compile Include="Atomos\PoolingMode.cs" />
-    <Compile Include="Atomos\PoolSettings.cs" />
-    <Compile Include="Atomos\StrictPoolStorage.cs" />
+    <Compile Include="Atomos\Pool\Pool.cs" />
+    <Compile Include="Atomos\Pool\PoolingMode.cs" />
+    <Compile Include="Atomos\Pool\PoolSettings.cs" />
+    <Compile Include="Atomos\Pool\StrictPoolStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

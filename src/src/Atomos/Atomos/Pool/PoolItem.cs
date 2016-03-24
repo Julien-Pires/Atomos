@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Atomos.Atomos
+namespace Atomos
 {
     /// <summary>
     /// Represents a wrapper around a pool item to ease item release

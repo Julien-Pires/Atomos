@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Atomos.Atomos
+namespace Atomos
 {
     /// <summary>
     /// Represents a set of pool parameters used to initialize the pool with custom behaviors

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-using Atomos.Atomos;
+using Atomos;
 
 using Xunit;
 

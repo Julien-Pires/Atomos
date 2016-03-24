@@ -1,4 +1,4 @@
-﻿namespace Atomos.Atomos
+﻿namespace Atomos
 {
     /// <summary>
     /// Represents an item inside a pool

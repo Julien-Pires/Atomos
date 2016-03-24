@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Atomos.Atomos
+namespace Atomos
 {
     /// <summary>
     /// Represents a collection of pools that his globally shared

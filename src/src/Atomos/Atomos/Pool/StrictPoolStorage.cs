@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Atomos.Atomos
+namespace Atomos
 {
     internal sealed partial class StrictPoolStorage<T> : IPoolStorage<T> where T : class
     {

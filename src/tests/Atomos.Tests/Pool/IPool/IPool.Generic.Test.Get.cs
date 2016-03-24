@@ -1,4 +1,4 @@
-﻿using Atomos.Atomos;
+﻿using Atomos;
 
 using Xunit;
 

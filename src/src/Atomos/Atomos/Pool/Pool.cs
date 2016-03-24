@@ -2,7 +2,7 @@
 using System.Reflection;
 using System.Collections.Generic;
 
-namespace Atomos.Atomos
+namespace Atomos
 {
     /// <summary>
     /// Implements a generic object pool. The pool will automatically create new elements

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq.Expressions;
 
-namespace Atomos.Atomos
+namespace Atomos
 {
     internal static class New<T>
     {

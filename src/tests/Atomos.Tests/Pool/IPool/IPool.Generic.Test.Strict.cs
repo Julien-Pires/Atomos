@@ -1,6 +1,6 @@
 ﻿using System;
 
-using Atomos.Atomos;
+using Atomos;
 
 namespace Atomos.Tests.Pool
 {
