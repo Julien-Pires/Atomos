@@ -19,7 +19,7 @@ namespace Atomos.Atomos
         private static readonly Action<T> DisposeAction = c => (c as IDisposable).Dispose();
         private static readonly Action<T> ResetAction = c => (c as IPoolItem).Reset();
 
-        private IPoolStorage<T> _storage;
+        private readonly IPoolStorage<T> _storage;
         private bool _isDisposed;
         private readonly Func<T> _initializer;
         private readonly Action<T> _reset;
@@ -32,10 +32,7 @@ namespace Atomos.Atomos
         /// <summary>
         /// Gets the number of available elements in the pool
         /// </summary>
-        public int Count
-        {
-            get { return _storage.Count; }
-        }
+        public int Count => _storage.Count;
 
         #endregion
 
@@ -43,11 +40,11 @@ namespace Atomos.Atomos
 
         static Pool()
         {
-            ResetAction = (typeof(IPoolItem).GetTypeInfo().IsAssignableFrom(typeof(T).GetTypeInfo())) ? ResetAction : EmptyAction;
+            ResetAction = typeof(IPoolItem).GetTypeInfo().IsAssignableFrom(typeof(T).GetTypeInfo()) ? ResetAction : EmptyAction;
         }
 
         /// <summary>
-        /// Initialize a new instance of Pool<T> with the specified parameters
+        /// Initialize a new instance of <see cref="Pool{T}"/> with the specified parameters
         /// </summary>
         /// <param name="settings">Pool parameters</param>
         public Pool(PoolSettings<T>? settings = null) : this(settings, CreateStorage)
@@ -55,7 +52,7 @@ namespace Atomos.Atomos
         }
 
         /// <summary>
-        /// Initialize a new instance of Pool<T> with the specified parameters and storage factory delegate
+        /// Initialize a new instance of <see cref="Pool{T}"/> with the specified parameters and storage factory delegate
         /// </summary>
         /// <param name="settings">Pool parameter</param>
         /// <param name="storageInitializer">Delegate used to initialize the pool storage</param>
@@ -64,10 +61,10 @@ namespace Atomos.Atomos
             if (storageInitializer == null)
                 throw new ArgumentNullException(nameof(storageInitializer));
 
-            PoolSettings<T> settingsValue = settings.HasValue ? settings.Value : default(PoolSettings<T>);
+            PoolSettings<T> settingsValue = settings ?? default(PoolSettings<T>);
             _initializer = settingsValue.Initializer ?? New<T>.Create;
             _reset = settingsValue.Reset ?? ResetAction;
-            _dispose = (typeof(IDisposable).GetTypeInfo().IsAssignableFrom(typeof(T).GetTypeInfo())) ? DisposeAction : EmptyAction;
+            _dispose = typeof(IDisposable).GetTypeInfo().IsAssignableFrom(typeof(T).GetTypeInfo()) ? DisposeAction : EmptyAction;
 
             _storage = storageInitializer(settingsValue);
             _storage.SetCapacity(settingsValue.Capacity);

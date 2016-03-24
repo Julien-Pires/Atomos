@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Atomos.Atomos
 {
-    internal sealed partial class FlexiblePoolStorage<T> : IPoolStorage<T> where T : class
+    internal sealed partial class FlexiblePoolStorage<T>
     {
         #region Nested
 
@@ -14,22 +14,16 @@ namespace Atomos.Atomos
 
             private readonly FlexiblePoolStorage<T> _storage;
             private int _index;
-            private int _version;
+            private readonly int _version;
             private T _current;
 
             #endregion
 
             #region Properties
 
-            public T Current
-            {
-                get { return _current; }
-            }
+            public T Current => _current;
 
-            object IEnumerator.Current
-            {
-                get { return _current; }
-            }
+            object IEnumerator.Current => _current;
 
             #endregion
 

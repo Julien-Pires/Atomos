@@ -14,22 +14,16 @@ namespace Atomos.Atomos
 
             private readonly StrictPoolStorage<T> _storage;
             private int _index;
-            private int _version;
+            private readonly int _version;
             private T _current;
 
             #endregion
 
             #region Properties
 
-            public T Current
-            {
-                get { return _current; }
-            }
+            public T Current => _current;
 
-            object IEnumerator.Current
-            {
-                get { return _current; }
-            }
+            object IEnumerator.Current => _current;
 
             #endregion
 

@@ -10,17 +10,14 @@ namespace Atomos.Atomos
 
         private int _version;
         private List<T> _availableItems = new List<T>();
-        private HashSet<T> _availableItemsSet = new HashSet<T>();
+        private readonly HashSet<T> _availableItemsSet = new HashSet<T>();
         private readonly HashSet<T> _usedItems = new HashSet<T>(); 
 
         #endregion
 
         #region Properties
 
-        public int Count
-        {
-            get { return _availableItems.Count + _usedItems.Count; }
-        }
+        public int Count => _availableItems.Count + _usedItems.Count;
 
         #endregion
 

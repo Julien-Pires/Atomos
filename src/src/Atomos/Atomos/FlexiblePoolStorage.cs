@@ -9,17 +9,14 @@ namespace Atomos.Atomos
         #region Fields
 
         private List<T> _availableItems = new List<T>();
-        private HashSet<T> _availableItemsTable = new HashSet<T>();
+        private readonly HashSet<T> _availableItemsTable = new HashSet<T>();
         private int _version;
 
         #endregion
 
         #region Properties
 
-        public int Count
-        {
-            get{ return _availableItems.Count; }
-        }
+        public int Count => _availableItems.Count;
 
         #endregion
 

@@ -11,7 +11,7 @@ namespace Atomos.Atomos
     {
         #region Fields
 
-        private static readonly Dictionary<string, Pool<T>> _pools;
+        private static readonly Dictionary<string, Pool<T>> Pools;
 
         /// <summary>
         /// Default shared pool instance
@@ -24,7 +24,7 @@ namespace Atomos.Atomos
 
         static SharedPool()
         {
-            _pools = new Dictionary<string, Pool<T>>();
+            Pools = new Dictionary<string, Pool<T>>();
         }
 
         #endregion
@@ -46,11 +46,11 @@ namespace Atomos.Atomos
                 throw new ArgumentException(nameof(name));
 
             Pool<T> pool;
-            if (_pools.TryGetValue(name, out pool))
+            if (Pools.TryGetValue(name, out pool))
                 return pool;
 
             pool = new Pool<T>(settings);
-            _pools[name] = pool;
+            Pools[name] = pool;
 
             return pool;
         }
@@ -69,10 +69,10 @@ namespace Atomos.Atomos
                 throw new ArgumentException(nameof(name));
 
             Pool<T> pool;
-            if (!_pools.TryGetValue(name, out pool))
+            if (!Pools.TryGetValue(name, out pool))
                 return false;
 
-            _pools.Remove(name);
+            Pools.Remove(name);
             pool.Dispose();
 
             return true;
@@ -83,10 +83,10 @@ namespace Atomos.Atomos
         /// </summary>
         public static void DestroyAll()
         {
-            foreach (Pool<T> pool in _pools.Values)
+            foreach (Pool<T> pool in Pools.Values)
                 pool.Dispose();
 
-            _pools.Clear();
+            Pools.Clear();
         }
 
         #endregion
