@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Atomos;
-
 namespace Atomos.Tests.Pool
 {
     public abstract partial class IPool_Generic_Test<TPool, T>
@@ -14,18 +12,11 @@ namespace Atomos.Tests.Pool
 
         #endregion
 
-        #region Properties
-
-        public PoolingMode Mode { get; }
-
-        #endregion
-
         #region Constructors
 
-        protected IPool_Generic_Test(Func<PoolSettings<T>, TPool> factory, PoolingMode mode)
+        protected IPool_Generic_Test(Func<TPool> factory)
         {
-            Pool = factory(new PoolSettings<T> { Mode = mode });
-            Mode = mode;
+            Pool = factory();
         }
 
         #endregion

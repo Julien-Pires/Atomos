@@ -1,6 +1,4 @@
-﻿using Atomos;
-
-using Xunit;
+﻿using Xunit;
 
 namespace Atomos.Tests.Pool
 {

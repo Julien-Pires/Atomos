@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Linq;
-
-using Atomos;
-
 using Xunit;
 
 namespace Atomos.Tests.Pool

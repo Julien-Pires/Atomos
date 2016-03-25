@@ -31,6 +31,8 @@ namespace Atomos
         /// <param name="item"></param>
         void Register(T item);
 
+        bool IsRegistered(T item);
+
         /// <summary>
         /// Resets the storage items state
         /// </summary>

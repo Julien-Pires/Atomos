@@ -1,7 +1,5 @@
 ﻿using System;
 
-using Atomos;
-
 namespace Atomos.Tests.Pool
 {
     public interface IPoolItem_Test : IPoolItem, IDisposable

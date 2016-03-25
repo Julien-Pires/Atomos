@@ -20,6 +20,7 @@ namespace Atomos
         private static readonly Action<T> ResetAction = c => (c as IPoolItem).Reset();
 
         private readonly IPoolStorage<T> _storage;
+        private readonly IPoolGuard<T> _storageGuard; 
         private bool _isDisposed;
         private readonly Func<T> _initializer;
         private readonly Action<T> _reset;
@@ -47,7 +48,7 @@ namespace Atomos
         /// Initialize a new instance of <see cref="Pool{T}"/> with the specified parameters
         /// </summary>
         /// <param name="settings">Pool parameters</param>
-        public Pool(PoolSettings<T>? settings = null) : this(settings, CreateStorage)
+        public Pool(PoolSettings<T>? settings = null) : this(settings, CreateStorage, c => null)
         {
         }
 
@@ -56,7 +57,8 @@ namespace Atomos
         /// </summary>
         /// <param name="settings">Pool parameter</param>
         /// <param name="storageInitializer">Delegate used to initialize the pool storage</param>
-        protected Pool(PoolSettings<T>? settings, Func<PoolSettings<T>, IPoolStorage<T>> storageInitializer)
+        protected Pool(PoolSettings<T>? settings, Func<PoolSettings<T>, IPoolStorage<T>> storageInitializer,
+            Func<PoolSettings<T>, IPoolGuard<T>> guardInitializer)
         {
             if (storageInitializer == null)
                 throw new ArgumentNullException(nameof(storageInitializer));
@@ -66,6 +68,7 @@ namespace Atomos
             _reset = settingsValue.Reset ?? ResetAction;
             _dispose = typeof(IDisposable).GetTypeInfo().IsAssignableFrom(typeof(T).GetTypeInfo()) ? DisposeAction : EmptyAction;
 
+            _storageGuard = guardInitializer(settingsValue);
             _storage = storageInitializer(settingsValue);
             _storage.SetCapacity(settingsValue.Capacity);
             for (int i = 0; i < settingsValue.Capacity; i++)
@@ -158,6 +161,9 @@ namespace Atomos
         {
             CheckDisposeState();
 
+            if(!_storageGuard.CanGet(_storage))
+                throw new PoolException($"Failed to get an item from the pool {this}");
+
             T item = _storage.Get();
             if (item != null)
                 return new PoolItem<T>(item, this);
@@ -178,6 +184,9 @@ namespace Atomos
 
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
+
+            if(!_storageGuard.CanSet(item, _storage))
+                throw new PoolException($"Failed to set {item} in the pool {this}");
 
             _reset(item);
             _storage.Set(item);

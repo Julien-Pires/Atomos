@@ -107,12 +107,17 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
+    <Compile Include="Atomos\Pool\FlexiblePoolGuard.cs" />
     <Compile Include="Atomos\Pool\FlexiblePoolStorage.cs" />
     <Compile Include="Atomos\Pool\FlexiblePoolStorage.Enumerator.cs" />
     <Compile Include="Atomos\Pool\IPool.cs" />
+    <Compile Include="Atomos\Pool\IPoolGuard.cs" />
     <Compile Include="Atomos\Pool\IPoolItem.cs" />
+    <Compile Include="Atomos\Pool\PoolException.cs" />
     <Compile Include="Atomos\Pool\PoolItem.cs" />
+    <Compile Include="Atomos\Pool\PoolStorage.cs" />
     <Compile Include="Atomos\Pool\SharedPool.cs" />
+    <Compile Include="Atomos\Pool\StrictPoolGuard.cs" />
     <Compile Include="Atomos\Pool\StrictPoolStorage.Enumerator.cs" />
   </ItemGroup>
   <ItemGroup>

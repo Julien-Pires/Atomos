@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-
-using Atomos;
-
 using Xunit;
 
 namespace Atomos.Tests.Pool
