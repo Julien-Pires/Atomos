@@ -29,7 +29,7 @@ namespace Atomos.Tests.Pool
             PoolItem<T> item = Pool.Get();
             Pool.Set(item);
 
-            Assert.Throws<ArgumentException>(() => item.Dispose());
+            Assert.Throws<PoolException>(() => item.Dispose());
         }
     }
 }

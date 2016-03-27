@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Atomos
 {
-    internal sealed partial class StrictPoolStorage<T>
+    internal sealed partial class PoolStorage<T>
     {
         #region Nested
 
@@ -12,7 +12,7 @@ namespace Atomos
         {
             #region Fields
 
-            private readonly StrictPoolStorage<T> _storage;
+            private readonly PoolStorage<T> _storage;
             private int _index;
             private readonly int _version;
             private T _current;
@@ -29,7 +29,7 @@ namespace Atomos
 
             #region Constructors
 
-			internal Enumerator(StrictPoolStorage<T> storage)
+			internal Enumerator(PoolStorage<T> storage)
             {
                 _storage = storage;
                 _index = 0;

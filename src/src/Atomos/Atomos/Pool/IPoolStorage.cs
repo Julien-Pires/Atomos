@@ -28,10 +28,22 @@ namespace Atomos
         /// <summary>
         /// Registers a new element to the storage
         /// </summary>
-        /// <param name="item"></param>
+        /// <param name="item">Represents the item to register</param>
         void Register(T item);
 
+        /// <summary>
+        /// Indicates that the item is registered to this storage
+        /// </summary>
+        /// <param name="item">Represents the item to test registration</param>
+        /// <returns>Returns true if the item is registered to this storage otherwise false</returns>
         bool IsRegistered(T item);
+
+        /// <summary>
+        /// Indicates that an item is available or not
+        /// </summary>
+        /// <param name="item">Represents the item to test availability</param>
+        /// <returns>Returns true if the item is available otherwise false</returns>
+        bool IsAvailable(T item);
 
         /// <summary>
         /// Resets the storage items state

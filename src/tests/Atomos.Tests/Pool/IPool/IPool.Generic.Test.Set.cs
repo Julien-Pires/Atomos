@@ -28,7 +28,7 @@ namespace Atomos.Tests.Pool
             PoolItem<T> item = Pool.Get();
             Pool.Set(item);
 
-            Assert.Throws<ArgumentException>(() => Pool.Set(item));
+            Assert.Throws<PoolException>(() => Pool.Set(item));
         }
 
         [Fact]
@@ -58,7 +58,7 @@ namespace Atomos.Tests.Pool
         {
             T item = Pool.Get();
             
-            Assert.Throws<ArgumentException>(() => Pool.Set(new []{ item, item }));
+            Assert.Throws<PoolException>(() => Pool.Set(new []{ item, item }));
         }
 
         [Fact]

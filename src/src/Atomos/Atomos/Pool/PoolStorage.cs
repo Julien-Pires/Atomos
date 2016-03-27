@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Atomos
 {
-    internal class PoolStorage<T> : IPoolStorage<T> where T : class
+    internal sealed partial class PoolStorage<T> : IPoolStorage<T> where T : class
     {
         #region Fields
 
@@ -12,58 +12,109 @@ namespace Atomos
         private List<T> _availableItems = new List<T>();
         private readonly HashSet<T> _availableItemsSet = new HashSet<T>();
         private readonly HashSet<T> _registeredItems = new HashSet<T>();
-        
+
         #endregion
+
+        #region Properties
 
         public int Count => _availableItems.Count;
 
-        public void DestroyItems()
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
 
-        public T Get()
-        {
-            throw new NotImplementedException();
-        }
+        #region Enumerator
 
         public IEnumerator<T> GetEnumerator()
         {
-            throw new NotImplementedException();
+            return new Enumerator(this);
         }
 
-        public bool IsRegistered(T item)
+        IEnumerator IEnumerable.GetEnumerator()
         {
-            throw new NotImplementedException();
+            return new Enumerator(this);
         }
 
-        public void Register(T item)
+        #endregion
+
+        #region Storage Management
+
+        public void DestroyItems()
         {
-            _availableItems.Add(item);
-            _availableItemsSet.Add(item);
-            _registeredItems.Add(item);
+            _availableItems.Clear();
+            _availableItemsSet.Clear();
+            _registeredItems.Clear();
 
             _version++;
         }
 
         public void ResetItems()
         {
-            throw new NotImplementedException();
-        }
+            _availableItemsSet.UnionWith(_registeredItems);
+            _availableItems.Clear();
+            _availableItems.AddRange(_availableItemsSet);
 
-        public void Set(T item)
-        {
-            throw new NotImplementedException();
+            _version++;
         }
 
         public void SetCapacity(int capacity)
         {
-            throw new NotImplementedException();
+            if (capacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(capacity));
+
+            List<T> availableItems = new List<T>(capacity);
+            int minCount = Math.Min(capacity, _availableItems.Count);
+            for (int i = 0; i < minCount; i++)
+                availableItems.Add(_availableItems[i]);
+            _availableItems = availableItems;
+
+            _availableItemsSet.Clear();
+            _availableItemsSet.UnionWith(_availableItems);
+
+            _version++;
         }
 
-        IEnumerator IEnumerable.GetEnumerator()
+        #endregion
+
+        #region Pooling
+
+        public void Register(T item)
         {
-            throw new NotImplementedException();
+            _registeredItems.Add(item);
+            _version++;
         }
+
+        public bool IsRegistered(T item)
+        {
+            return _registeredItems.Contains(item);
+        }
+
+        public bool IsAvailable(T item)
+        {
+            return _availableItemsSet.Contains(item);
+        }
+
+        public void Set(T item)
+        {
+            _availableItems.Add(item);
+            _availableItemsSet.Add(item);
+
+            _version++;
+        }
+
+        public T Get()
+        {
+            if (_availableItems.Count == 0)
+                return null;
+
+            int index = _availableItems.Count - 1;
+            T item = _availableItems[index];
+            _availableItems.RemoveAt(index);
+            _availableItemsSet.Remove(item);
+
+            _version++;
+
+            return item;
+        }
+
+        #endregion
     }
 }

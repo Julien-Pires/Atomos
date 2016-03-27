@@ -108,8 +108,6 @@
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
     <Compile Include="Atomos\Pool\FlexiblePoolGuard.cs" />
-    <Compile Include="Atomos\Pool\FlexiblePoolStorage.cs" />
-    <Compile Include="Atomos\Pool\FlexiblePoolStorage.Enumerator.cs" />
     <Compile Include="Atomos\Pool\IPool.cs" />
     <Compile Include="Atomos\Pool\IPoolGuard.cs" />
     <Compile Include="Atomos\Pool\IPoolItem.cs" />
@@ -118,7 +116,7 @@
     <Compile Include="Atomos\Pool\PoolStorage.cs" />
     <Compile Include="Atomos\Pool\SharedPool.cs" />
     <Compile Include="Atomos\Pool\StrictPoolGuard.cs" />
-    <Compile Include="Atomos\Pool\StrictPoolStorage.Enumerator.cs" />
+    <Compile Include="Atomos\Pool\PoolStorage.Enumerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Atomos\Pool\IPoolStorage.cs" />
@@ -126,7 +124,6 @@
     <Compile Include="Atomos\Pool\Pool.cs" />
     <Compile Include="Atomos\Pool\PoolingMode.cs" />
     <Compile Include="Atomos\Pool\PoolSettings.cs" />
-    <Compile Include="Atomos\Pool\StrictPoolStorage.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />

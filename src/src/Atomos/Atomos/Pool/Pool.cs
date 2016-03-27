@@ -39,6 +39,9 @@ namespace Atomos
 
         #region Constructors
 
+        /// <summary>
+        /// Initialize the Pool type
+        /// </summary>
         static Pool()
         {
             ResetAction = typeof(IPoolItem).GetTypeInfo().IsAssignableFrom(typeof(T).GetTypeInfo()) ? ResetAction : EmptyAction;
@@ -48,7 +51,7 @@ namespace Atomos
         /// Initialize a new instance of <see cref="Pool{T}"/> with the specified parameters
         /// </summary>
         /// <param name="settings">Pool parameters</param>
-        public Pool(PoolSettings<T>? settings = null) : this(settings, CreateStorage, c => null)
+        public Pool(PoolSettings<T>? settings = null) : this(settings, c => new PoolStorage<T>(), CreateGuardStorage)
         {
         }
 
@@ -57,6 +60,7 @@ namespace Atomos
         /// </summary>
         /// <param name="settings">Pool parameter</param>
         /// <param name="storageInitializer">Delegate used to initialize the pool storage</param>
+        /// <param name="guardInitializer">Delegate used to initialize the pool guard</param>
         protected Pool(PoolSettings<T>? settings, Func<PoolSettings<T>, IPoolStorage<T>> storageInitializer,
             Func<PoolSettings<T>, IPoolGuard<T>> guardInitializer)
         {
@@ -70,34 +74,40 @@ namespace Atomos
 
             _storageGuard = guardInitializer(settingsValue);
             _storage = storageInitializer(settingsValue);
+
             _storage.SetCapacity(settingsValue.Capacity);
             for (int i = 0; i < settingsValue.Capacity; i++)
-                _storage.Register(_initializer());
+            {
+                T item = _initializer();
+                if(_storageGuard.MustRegister())
+                    _storage.Register(item);
+                _storage.Set(item);
+            }
         }
 
         #endregion
 
         #region Initialize
 
-        private static IPoolStorage<T> CreateStorage(PoolSettings<T> settings)
+        private static IPoolGuard<T> CreateGuardStorage(PoolSettings<T> settings)
         {
             PoolingMode mode = settings.Mode;
-            IPoolStorage<T> storage;
+            IPoolGuard<T> storageGuard;
             switch(mode)
             {
                 case PoolingMode.Strict:
-                    storage = new StrictPoolStorage<T>();
+                    storageGuard = new StrictPoolGuard<T>();
                     break;
 
                 case PoolingMode.Flexible:
-                    storage = new FlexiblePoolStorage<T>();
+                    storageGuard = new FlexiblePoolGuard<T>();
                     break;
 
                 default:
                     throw new ArgumentException($"{mode} is not a valid pooling mode");
             }
 
-            return storage;
+            return storageGuard;
         }
 
         #endregion
@@ -162,14 +172,15 @@ namespace Atomos
             CheckDisposeState();
 
             if(!_storageGuard.CanGet(_storage))
-                throw new PoolException($"Failed to get an item from the pool {this}");
+                throw new PoolException($"Failed to get an item, guard rules not fullfilled");
 
             T item = _storage.Get();
             if (item != null)
                 return new PoolItem<T>(item, this);
 
-            _storage.Register(_initializer());
-            item = _storage.Get();
+            item = _initializer();
+            if(_storageGuard.MustRegister())
+                _storage.Register(item);
 
             return new PoolItem<T>(item, this);
         }
@@ -186,7 +197,7 @@ namespace Atomos
                 throw new ArgumentNullException(nameof(item));
 
             if(!_storageGuard.CanSet(item, _storage))
-                throw new PoolException($"Failed to set {item} in the pool {this}");
+                throw new PoolException($"Failed to set {item}, guard rules not fullfilled");
 
             _reset(item);
             _storage.Set(item);
