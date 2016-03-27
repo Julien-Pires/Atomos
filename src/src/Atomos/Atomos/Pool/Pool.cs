@@ -52,7 +52,7 @@ namespace Atomos
         /// Initialize a new instance of <see cref="Pool{T}"/> with the specified parameters
         /// </summary>
         /// <param name="settings">Pool parameters</param>
-        public Pool(PoolSettings<T>? settings = null) : this(settings, c => new PoolStorage<T>(), CreateGuardStorage)
+        public Pool(PoolSettings<T>? settings = null) : this(settings, null, storageGuard:null)
         {
         }
 
@@ -64,28 +64,32 @@ namespace Atomos
         /// <param name="guardInitializer">Delegate used to initialize the pool guard</param>
         protected Pool(PoolSettings<T>? settings, Func<PoolSettings<T>, IPoolStorage<T>> storageInitializer,
             Func<PoolSettings<T>, IPoolGuard<T>> guardInitializer)
+            : this(settings, 
+                  storageInitializer?.Invoke(settings ?? default(PoolSettings<T>)), 
+                  guardInitializer?.Invoke(settings ?? default(PoolSettings<T>)))
         {
-            if (storageInitializer == null)
-                throw new ArgumentNullException(nameof(storageInitializer));
+        }
 
+        protected Pool(PoolSettings<T>? settings, IPoolStorage<T> storage, IPoolGuard<T> storageGuard)
+        {
             PoolSettings<T> settingsValue = settings ?? default(PoolSettings<T>);
             _initializer = settingsValue.Initializer ?? New<T>.Create;
             _reset = settingsValue.Reset ?? ResetAction;
             _dispose = typeof(IDisposable).GetTypeInfo().IsAssignableFrom(typeof(T).GetTypeInfo()) ? DisposeAction : EmptyAction;
 
-            _storageGuard = guardInitializer(settingsValue);
-            _storage = storageInitializer(settingsValue);
+            _storageGuard = storageGuard ?? CreateGuardStorage(settingsValue);
+            _storage = storage ?? new PoolStorage<T>();
 
             _storage.SetCapacity(settingsValue.Capacity);
             for (int i = 0; i < settingsValue.Capacity; i++)
             {
                 T item = _initializer();
-                if(_storageGuard.MustRegister())
+                if (_storageGuard.MustRegister())
                     _storage.Register(item);
 
                 _storage.Set(item, NullParameter);
             }
-        }
+        } 
 
         #endregion
 
