@@ -43,10 +43,7 @@ namespace Atomos
         /// <param name="wrapper">Current PoolItem instance</param>
         public static implicit operator T(PoolItem<T> wrapper)
         {
-            if (wrapper._isDisposed)
-                throw new InvalidOperationException($"Failed to cast to {typeof(T)} because instance has been disposed");
-
-            return  wrapper.Item;
+            return wrapper._isDisposed ? null : wrapper.Item;
         }
 
         #endregion

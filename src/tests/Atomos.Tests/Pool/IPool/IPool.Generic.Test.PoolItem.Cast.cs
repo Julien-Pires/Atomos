@@ -1,5 +1,4 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 
 namespace Atomos.Tests.Pool
 {
@@ -19,7 +18,7 @@ namespace Atomos.Tests.Pool
             PoolItem<T> item = Pool.Get();
             item.Dispose();
 
-            Assert.Throws<InvalidOperationException>(() => (T)item);
+            Assert.Null((T)item);
         }
     }
 }
