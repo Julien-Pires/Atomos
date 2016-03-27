@@ -25,7 +25,6 @@ namespace Atomos
         private bool _isDisposed;
         private readonly Func<T> _initializer;
         private readonly Action<T> _reset;
-        private readonly Action<T> _dispose;
 
         #endregion
 
@@ -46,6 +45,7 @@ namespace Atomos
         static Pool()
         {
             ResetAction = typeof(IPoolItem).GetTypeInfo().IsAssignableFrom(typeof(T).GetTypeInfo()) ? ResetAction : EmptyAction;
+            DisposeAction = typeof(IDisposable).GetTypeInfo().IsAssignableFrom(typeof(T).GetTypeInfo()) ? DisposeAction : EmptyAction;
         }
 
         /// <summary>
@@ -75,7 +75,6 @@ namespace Atomos
             PoolSettings<T> settingsValue = settings ?? default(PoolSettings<T>);
             _initializer = settingsValue.Initializer ?? New<T>.Create;
             _reset = settingsValue.Reset ?? ResetAction;
-            _dispose = typeof(IDisposable).GetTypeInfo().IsAssignableFrom(typeof(T).GetTypeInfo()) ? DisposeAction : EmptyAction;
 
             _storageGuard = storageGuard ?? CreateGuardStorage(settingsValue);
             _storage = storage ?? new PoolStorage<T>();
@@ -130,7 +129,7 @@ namespace Atomos
 
             _storage.ResetItems();
 
-            Action<T> resetAction = destroyItems ? _dispose : _reset;
+            Action<T> resetAction = destroyItems ? DisposeAction : _reset;
             foreach (T item in _storage)
                 resetAction(item);
 
@@ -233,7 +232,7 @@ namespace Atomos
         protected PoolItem<T> Get<TParam>(TParam parameter)
         {
             if (!_storageGuard.CanGet(_storage))
-                throw new PoolException($"Failed to get an item, guard rules not fullfilled");
+                throw new PoolException("Failed to get an item, guard rules not fullfilled");
 
             T item = _storage.Get(parameter);
             if (item != null)
