@@ -111,6 +111,7 @@
     <Compile Include="Atomos\Pool\IPool.cs" />
     <Compile Include="Atomos\Pool\IPoolGuard.cs" />
     <Compile Include="Atomos\Pool\IPoolItem.cs" />
+    <Compile Include="Atomos\Pool\NullPoolStorageParameter.cs" />
     <Compile Include="Atomos\Pool\PoolException.cs" />
     <Compile Include="Atomos\Pool\PoolItem.cs" />
     <Compile Include="Atomos\Pool\PoolStorage.cs" />

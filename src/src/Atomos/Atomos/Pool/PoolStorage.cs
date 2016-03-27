@@ -92,7 +92,7 @@ namespace Atomos
             return _availableItemsSet.Contains(item);
         }
 
-        public void Set(T item)
+        public void Set<TParam>(T item, TParam parameter)
         {
             _availableItems.Add(item);
             _availableItemsSet.Add(item);
@@ -100,7 +100,7 @@ namespace Atomos
             _version++;
         }
 
-        public T Get()
+        public T Get<TParam>(TParam parameter)
         {
             if (_availableItems.Count == 0)
                 return null;

@@ -65,14 +65,18 @@ namespace Atomos
         /// <summary>
         /// Gets an available element
         /// </summary>
+        /// <typeparam name="TParam">Type of parameter</typeparam>
+        /// <param name="parameter">Additional parameter</param>
         /// <returns>Return an available element if at least one exists otherwise null</returns>
-        T Get();
+        T Get<TParam>(TParam parameter);
 
         /// <summary>
         /// Returns an element to the storage
         /// </summary>
+        /// <typeparam name="TParam">Type of parameter</typeparam>
         /// <param name="item">Represents the element that must be returned</param>
-        void Set(T item);
+        /// <param name="parameter">Additional parameter</param>
+        void Set<TParam>(T item, TParam parameter);
 
         #endregion
     }

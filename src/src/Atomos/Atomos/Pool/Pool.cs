@@ -18,6 +18,7 @@ namespace Atomos
         private static readonly Action<T> EmptyAction = c => { };
         private static readonly Action<T> DisposeAction = c => (c as IDisposable).Dispose();
         private static readonly Action<T> ResetAction = c => (c as IPoolItem).Reset();
+        private static readonly NullPoolStorageParameter NullParameter = new NullPoolStorageParameter();
 
         private readonly IPoolStorage<T> _storage;
         private readonly IPoolGuard<T> _storageGuard; 
@@ -81,7 +82,8 @@ namespace Atomos
                 T item = _initializer();
                 if(_storageGuard.MustRegister())
                     _storage.Register(item);
-                _storage.Set(item);
+
+                _storage.Set(item, NullParameter);
             }
         }
 
@@ -171,18 +173,7 @@ namespace Atomos
         {
             CheckDisposeState();
 
-            if(!_storageGuard.CanGet(_storage))
-                throw new PoolException($"Failed to get an item, guard rules not fullfilled");
-
-            T item = _storage.Get();
-            if (item != null)
-                return new PoolItem<T>(item, this);
-
-            item = _initializer();
-            if(_storageGuard.MustRegister())
-                _storage.Register(item);
-
-            return new PoolItem<T>(item, this);
+            return Get(NullParameter);
         }
 
         /// <summary>
@@ -193,14 +184,7 @@ namespace Atomos
         {
             CheckDisposeState();
 
-            if (item == null)
-                throw new ArgumentNullException(nameof(item));
-
-            if(!_storageGuard.CanSet(item, _storage))
-                throw new PoolException($"Failed to set {item}, guard rules not fullfilled");
-
-            _reset(item);
-            _storage.Set(item);
+            Set(item, NullParameter);
         }
 
         /// <summary>
@@ -216,6 +200,46 @@ namespace Atomos
 
             foreach(T item in items)
                 Set(item);
+        }
+
+        /// <summary>
+        /// Returns an element to the pool 
+        /// </summary>
+        /// <typeparam name="TParam">Type of parameter</typeparam>
+        /// <param name="item">Represents an element that must be returned</param>
+        /// <param name="parameter">Additional parameter</param>
+        protected void Set<TParam>(T item, TParam parameter)
+        {
+            if (item == null)
+                throw new ArgumentNullException(nameof(item));
+
+            if (!_storageGuard.CanSet(item, _storage))
+                throw new PoolException($"Failed to set {item}, guard rules not fullfilled");
+
+            _reset(item);
+            _storage.Set(item, parameter);
+        }
+
+        /// <summary>
+        /// Gets an available element
+        /// </summary>
+        /// <typeparam name="TParam">Type of paramater</typeparam>
+        /// <param name="parameter">Additional parameter</param>
+        /// <returns>Return an element from the pool, if no elements are available a new one will be created</returns>
+        protected PoolItem<T> Get<TParam>(TParam parameter)
+        {
+            if (!_storageGuard.CanGet(_storage))
+                throw new PoolException($"Failed to get an item, guard rules not fullfilled");
+
+            T item = _storage.Get(parameter);
+            if (item != null)
+                return new PoolItem<T>(item, this);
+
+            item = _initializer();
+            if (_storageGuard.MustRegister())
+                _storage.Register(item);
+
+            return new PoolItem<T>(item, this);
         }
 
         #endregion
