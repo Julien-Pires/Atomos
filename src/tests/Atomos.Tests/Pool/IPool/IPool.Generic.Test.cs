@@ -4,7 +4,7 @@ namespace Atomos.Tests.Pool
 {
     public abstract partial class IPool_Generic_Test<TPool, T>
         where TPool : IPool<T>
-        where T : class, IPoolItem_Test, new()
+        where T : class
     {
         #region Fields
 
@@ -18,6 +18,14 @@ namespace Atomos.Tests.Pool
         {
             Pool = factory();
         }
+
+        #endregion
+
+        #region Items Validation
+
+        protected abstract bool IsDisposed(T item);
+
+        protected abstract bool IsReset(T item);
 
         #endregion
     }

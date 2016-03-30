@@ -37,7 +37,7 @@ namespace Atomos
         /// <param name="name">Name of the pool</param>
         /// <param name="settings">Pool parameters used when a new pool is created</param>
         /// <returns>Returns a shared pool instance</returns>
-        public static Pool<T> Get(string name, PoolSettings<T>? settings = null)
+        public static Pool<T> Get(string name, PoolSettings<T> settings = null)
         {
             if (name == null)
                 throw new ArgumentNullException(nameof(name));

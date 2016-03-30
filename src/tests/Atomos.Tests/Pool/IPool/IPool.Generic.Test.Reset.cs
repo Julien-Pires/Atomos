@@ -26,19 +26,7 @@ namespace Atomos.Tests.Pool
             Pool.Set(item);
             Pool.Reset();
 
-            Assert.True(((T)item).IsReset);
-        }
-
-        [Theory]
-        [InlineData(10)]
-        public void Reset_SettingResetParameter_OverridePoolItemInterface(int value)
-        {
-            Pool<T> pool = new Pool<T>(new PoolSettings<T> { Reset = c => c.Value = value });
-            PoolItem<T> item = pool.Get();
-            pool.Set(item);
-            pool.Reset();
-
-            Assert.Equal(value, ((T)item).Value);
+            Assert.True(IsReset(item));
         }
 
         [Fact]
@@ -48,7 +36,7 @@ namespace Atomos.Tests.Pool
             Pool.Set(item);
             Pool.Reset(true);
 
-            Assert.True(((T)item).IsDisposed);
+            Assert.True(IsDisposed(item));
         }
     }
 }

@@ -82,5 +82,17 @@ namespace Atomos.Tests.Pool
 
             Assert.Equal(value, ((T)pool.Get()).Value);
         }
+
+        [Theory]
+        [InlineData(10)]
+        public void Constructor_SettingResetParameter_OverridePoolItemInterface(int value)
+        {
+            Pool<T> pool = new Pool<T>(new PoolSettings<T> { Reset = c => c.Value = value, Mode = Mode });
+            PoolItem<T> item = pool.Get();
+            pool.Set(item);
+            pool.Reset();
+
+            Assert.Equal(value, ((T)item).Value);
+        }
     }
 }

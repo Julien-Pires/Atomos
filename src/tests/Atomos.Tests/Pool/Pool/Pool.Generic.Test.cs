@@ -21,5 +21,19 @@ namespace Atomos.Tests.Pool
         }
 
         #endregion
+
+        #region Items Validation
+
+        protected override bool IsDisposed(T item)
+        {
+            return item.IsDisposed;
+        }
+
+        protected override bool IsReset(T item)
+        {
+            return item.IsReset;
+        }
+
+        #endregion
     }
 }

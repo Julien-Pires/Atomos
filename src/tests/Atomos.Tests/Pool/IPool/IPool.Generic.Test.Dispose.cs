@@ -12,7 +12,7 @@ namespace Atomos.Tests.Pool
             Pool.Set(item);
             Pool.Dispose();
 
-            Assert.True(((T)item).IsDisposed);
+            Assert.True(IsDisposed(item));
         }
 
         [Fact]
