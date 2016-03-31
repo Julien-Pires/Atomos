@@ -13,6 +13,7 @@ namespace Atomos.Tests.Pool
             CollectionPool<TItem> pool = Builder.WithInitialCapacity(initialCapacity);
             TItem item = pool.Get();
 
+            Assert.NotNull(item);
             Assert.Equal(initialCapacity, GetCapacity(item));
         }
 
@@ -25,6 +26,7 @@ namespace Atomos.Tests.Pool
             CollectionPool<TItem> pool = Builder.WithInitialCapacity(initialCapacity);
             TItem item = pool.Get(initialCapacity);
 
+            Assert.NotNull(item);
             Assert.Equal(initialCapacity, GetCapacity(item));
         }
 
@@ -37,6 +39,7 @@ namespace Atomos.Tests.Pool
             CollectionPool<TItem> pool = Builder.WithInitialCapacity(initialCapacity);
             TItem item = pool.Get(parameter);
 
+            Assert.NotNull(item);
             Assert.Equal(initialCapacity, GetCapacity(item));
         }
     }

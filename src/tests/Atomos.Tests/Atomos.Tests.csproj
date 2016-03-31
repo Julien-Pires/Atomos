@@ -92,12 +92,16 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Pool\CollectionPool\ArrayPool.Generic.Test.cs" />
     <Compile Include="Pool\CollectionPool\ArrayPool.Test.cs" />
     <Compile Include="Pool\CollectionPool\CollectionPool.Builder.cs" />
     <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Any.cs" />
     <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Any.Get.cs" />
     <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Any.Set.cs" />
     <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.cs" />
+    <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Definite.cs" />
+    <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Definite.Get.cs" />
+    <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Definite.Set.Cs" />
     <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Fixed.cs" />
     <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Fixed.Get.Cs" />
     <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Fixed.Set.cs" />

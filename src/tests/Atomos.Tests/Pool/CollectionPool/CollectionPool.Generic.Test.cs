@@ -16,7 +16,7 @@ namespace Atomos.Tests.Pool
         #region Constructors
 
         protected CollectionPool_Generic_Test(Func<CollectionPoolSettings<TItem>,  TPool> factory, CollectionPoolMode mode)
-            : base(factory)
+            : base(() => factory(null))
         {
             Builder = new CollectionPool_Builder<TItem>(factory).WithCollectionPoolMode(mode);
         }
