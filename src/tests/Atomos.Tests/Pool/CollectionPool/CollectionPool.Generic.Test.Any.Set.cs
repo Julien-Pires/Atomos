@@ -1,20 +1,25 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Xunit;
+﻿using Xunit;
 
 namespace Atomos.Tests.Pool
 {
-    public abstract partial class CollectionPool_Generic_Test_Any<TPool, TItem>
+    public abstract partial class CollectionPool_Generic_Test<TPool, TItem>
     {
-        [Theory]
-        [InlineData(new[] { 10 })]
-        [InlineData(new[] { 10, 10, 100 })]
-        [InlineData(new [] { 10, 100, 200, 500 })]
-        public void Set_AnyItem_WithSuccess(int[] sizes)
+        [Fact]
+        public void Set_WhenAnyModeAndAnyItem_WithSuccess()
         {
-            List<TItem> items = sizes.Select(c => Pool.Get(c)).ToList();
+            TPool pool = Build();
+            pool.Set(pool.Get());
+        }
 
-            Pool.Set(items);
+        [Theory]
+        [InlineData(0)]
+        [InlineData(10)]
+        [InlineData(5000)]
+        public void Set_WhenAnyModeAndFlexibleAndAnyItem_WithSuccess(int capacity)
+        {
+            TPool pool = Build(mode: PoolingMode.Flexible);
+            TItem item = CreateItem(capacity);
+            pool.Set(item);
         }
     }
 }

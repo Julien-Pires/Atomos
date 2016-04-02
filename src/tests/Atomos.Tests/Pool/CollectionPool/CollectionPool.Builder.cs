@@ -3,11 +3,13 @@ using System.Collections;
 
 namespace Atomos.Tests.Pool
 {
-    public sealed class CollectionPool_Builder<TItem> where TItem : class, ICollection
+    public sealed class CollectionPool_Builder<TPool, TItem>
+        where TPool : CollectionPool<TItem>, IPool<TItem>
+        where TItem : class, ICollection
     {
         #region Fields
 
-        private readonly Func<CollectionPoolSettings<TItem>, CollectionPool<TItem>> _factory; 
+        private readonly Func<CollectionPoolSettings<TItem>, TPool> _factory; 
         private int _initialCapacity;
         private CollectionPoolMode _collectionMode;
         private PoolingMode _poolMode;
@@ -16,7 +18,7 @@ namespace Atomos.Tests.Pool
 
         #region Constructors
 
-        public CollectionPool_Builder(Func<CollectionPoolSettings<TItem>, CollectionPool<TItem>> factory)
+        public CollectionPool_Builder(Func<CollectionPoolSettings<TItem>, TPool> factory)
         {
             _factory = factory;
         }
@@ -25,7 +27,7 @@ namespace Atomos.Tests.Pool
 
         #region Methods
 
-        public CollectionPool<TItem> Build()
+        public TPool Build()
         {
             return _factory(new CollectionPoolSettings<TItem>
             {
@@ -35,26 +37,26 @@ namespace Atomos.Tests.Pool
             });
         }
 
-        public static implicit operator CollectionPool<TItem>(CollectionPool_Builder<TItem> builder)
+        public static implicit operator TPool(CollectionPool_Builder<TPool, TItem> builder)
         {
             return builder.Build();
         }
 
-        public CollectionPool_Builder<TItem> WithInitialCapacity(int initialCapacity)
+        public CollectionPool_Builder<TPool, TItem> WithInitialCapacity(int initialCapacity)
         {
             _initialCapacity = initialCapacity;
 
             return this;
         }
 
-        public CollectionPool_Builder<TItem> WithCollectionPoolMode(CollectionPoolMode mode)
+        public CollectionPool_Builder<TPool, TItem> WithCollectionPoolMode(CollectionPoolMode mode)
         {
             _collectionMode = mode;
 
             return this;
         }
 
-        public CollectionPool_Builder<TItem> WithPoolingMode(PoolingMode mode)
+        public CollectionPool_Builder<TPool, TItem> WithPoolingMode(PoolingMode mode)
         {
             _poolMode = mode;
 

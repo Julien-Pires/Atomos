@@ -2,11 +2,12 @@
 
 namespace Atomos.Tests.Pool
 {
-    public abstract partial class CollectionPool_Generic_Test_Definite<TPool, TItem>
+    public abstract partial class CollectionPool_Generic_Test<TPool, TItem>
     {
-        public void Get_WhenNoParameter_WithSuccess()
+        [Fact]
+        public void Get_WhenDefiniteModeAndNoParameter_WithSuccess()
         {
-            CollectionPool<TItem> pool = Builder;
+            TPool pool = Build(CollectionPoolMode.Definite);
             TItem item = pool.Get();
 
             Assert.NotNull(item);
@@ -15,9 +16,9 @@ namespace Atomos.Tests.Pool
         [Theory]
         [InlineData(4, 16)]
         [InlineData(10, 500)]
-        public void Get_WhenParameter_WithSuccess(int initialCapacity, int capacity)
+        public void Get_WhenDefiniteModeAndParameter_WithSuccess(int initialCapacity, int capacity)
         {
-            CollectionPool<TItem> pool = Builder.WithInitialCapacity(initialCapacity);
+            TPool pool = Build(CollectionPoolMode.Definite, initialCapacity);
             TItem item = pool.Get(capacity);
 
             Assert.NotEqual(initialCapacity, GetCapacity(item));

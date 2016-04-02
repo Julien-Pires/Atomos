@@ -3,22 +3,35 @@ using System.Collections;
 
 namespace Atomos.Tests.Pool
 {
-    public abstract class CollectionPool_Generic_Test<TPool, TItem> : IPool_Generic_Test<TPool, TItem>
+    public abstract partial class CollectionPool_Generic_Test<TPool, TItem> : IPool_Generic_Test<TPool, TItem>
         where TPool : CollectionPool<TItem>, IPool<TItem>
         where TItem : class, ICollection
     {
         #region Fields
 
-        protected readonly CollectionPool_Builder<TItem> Builder;
+        private readonly Func<CollectionPoolSettings<TItem>, TPool> _factory;
 
         #endregion
 
         #region Constructors
 
-        protected CollectionPool_Generic_Test(Func<CollectionPoolSettings<TItem>,  TPool> factory, CollectionPoolMode mode)
+        protected CollectionPool_Generic_Test(Func<CollectionPoolSettings<TItem>,  TPool> factory)
             : base(() => factory(null))
         {
-            Builder = new CollectionPool_Builder<TItem>(factory).WithCollectionPoolMode(mode);
+            _factory = factory;
+        }
+
+        #endregion
+
+        #region Builder
+
+        protected TPool Build(CollectionPoolMode collectionMode = CollectionPoolMode.Any,
+            int initialCapacity = 0, PoolingMode mode = PoolingMode.Strict)
+        {
+            return new CollectionPool_Builder<TPool, TItem>(_factory)
+                .WithCollectionPoolMode(collectionMode)
+                .WithInitialCapacity(initialCapacity)
+                .WithPoolingMode(mode);
         }
 
         #endregion
