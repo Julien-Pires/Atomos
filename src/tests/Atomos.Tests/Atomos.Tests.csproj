@@ -109,6 +109,7 @@
     <Compile Include="Pool\CollectionPool\CollectionPool.Builder.cs" />
     <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Any.Get.cs" />
     <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Any.Set.cs" />
+    <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Constructors.cs" />
     <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.cs" />
     <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Definite.Get.cs" />
     <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Definite.Set.Cs" />
