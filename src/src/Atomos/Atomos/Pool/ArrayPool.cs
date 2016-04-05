@@ -9,14 +9,5 @@
         } 
 
         #endregion
-
-        #region Pooling
-
-        public override T[] Get(int capacity)
-        {
-            return null;
-        }
-
-        #endregion
     }
 }

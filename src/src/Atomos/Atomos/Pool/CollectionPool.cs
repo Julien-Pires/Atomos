@@ -15,7 +15,10 @@ namespace Atomos
 
         #region Pooling
 
-        public abstract TCollection Get(int capacity);
+        public TCollection Get(int capacity)
+        {
+            return null;
+        }
 
         #endregion
     }

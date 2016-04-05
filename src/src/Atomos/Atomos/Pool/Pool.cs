@@ -20,9 +20,10 @@ namespace Atomos
         private static readonly Action<T> ResetAction = c => (c as IPoolItem).Reset();
         private static readonly NullPoolStorageParameter NullParameter = new NullPoolStorageParameter();
 
-        private readonly IPoolStorage<T> _storage;
-        private readonly IPoolGuard<T> _storageGuard; 
         private bool _isDisposed;
+        private readonly IPoolStorage<T> _storage;
+        private readonly IPoolGuard _storageGuard;
+        private readonly IPoolStorageQuery _query;
         private readonly Func<T> _initializer;
         private readonly Action<T> _reset;
 
@@ -52,29 +53,18 @@ namespace Atomos
         /// Initialize a new instance of <see cref="Pool{T}"/> with the specified parameters
         /// </summary>
         /// <param name="settings">Pool parameters</param>
-        public Pool(PoolSettings<T> settings = null) : this(settings, null, storageGuard:null)
+        public Pool(PoolSettings<T> settings = null) : this(settings, null, null, null)
         {
         }
 
-        /// <summary>
-        /// Initialize a new instance of <see cref="Pool{T}"/> with the specified parameters and storage factory delegate
-        /// </summary>
-        /// <param name="settings">Pool parameter</param>
-        /// <param name="storageInitializer">Delegate used to initialize the pool storage</param>
-        /// <param name="guardInitializer">Delegate used to initialize the pool guard</param>
-        protected Pool(PoolSettings<T> settings, Func<PoolSettings<T>, IPoolStorage<T>> storageInitializer,
-            Func<PoolSettings<T>, IPoolGuard<T>> guardInitializer)
-            : this(settings, storageInitializer?.Invoke(settings), guardInitializer?.Invoke(settings))
-        {
-        }
-
-        protected Pool(PoolSettings<T> settings, IPoolStorage<T> storage, IPoolGuard<T> storageGuard)
+        protected Pool(PoolSettings<T> settings, IPoolStorage<T> storage, IPoolGuard storageGuard, IPoolStorageQuery query)
         {
             _initializer = settings.Initializer ?? New<T>.Create;
             _reset = settings.Reset ?? ResetAction;
 
             _storageGuard = storageGuard ?? CreateGuardStorage(settings);
             _storage = storage ?? new PoolStorage<T>();
+            _query = query ?? DefaultPoolStorageQuery.Default;
 
             _storage.SetCapacity(settings.Capacity);
             for (int i = 0; i < settings.Capacity; i++)
@@ -91,18 +81,18 @@ namespace Atomos
 
         #region Initialize
 
-        private static IPoolGuard<T> CreateGuardStorage(PoolSettings<T> settings)
+        private static IPoolGuard CreateGuardStorage(PoolSettings<T> settings)
         {
             PoolingMode mode = settings.Mode;
-            IPoolGuard<T> storageGuard;
+            IPoolGuard storageGuard;
             switch(mode)
             {
                 case PoolingMode.Strict:
-                    storageGuard = new StrictPoolGuard<T>();
+                    storageGuard = new StrictPoolGuard();
                     break;
 
                 case PoolingMode.Flexible:
-                    storageGuard = new FlexiblePoolGuard<T>();
+                    storageGuard = new FlexiblePoolGuard();
                     break;
 
                 default:

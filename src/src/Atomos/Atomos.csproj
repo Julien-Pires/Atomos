@@ -109,12 +109,15 @@
     <!-- A reference to the entire .NET Framework is automatically included -->
     <Compile Include="Atomos\Pool\ArrayPool.cs" />
     <Compile Include="Atomos\Pool\CollectionPool.cs" />
+    <Compile Include="Atomos\Pool\FixedCollectionPoolGuard.cs" />
     <Compile Include="Atomos\Pool\CollectionPoolMode.cs" />
     <Compile Include="Atomos\Pool\CollectionPoolSettings.cs" />
+    <Compile Include="Atomos\Pool\DefaultPoolStorageQuery.cs" />
     <Compile Include="Atomos\Pool\FlexiblePoolGuard.cs" />
     <Compile Include="Atomos\Pool\IPool.cs" />
     <Compile Include="Atomos\Pool\IPoolGuard.cs" />
     <Compile Include="Atomos\Pool\IPoolItem.cs" />
+    <Compile Include="Atomos\Pool\IPoolStorageQuery.cs" />
     <Compile Include="Atomos\Pool\NullPoolStorageParameter.cs" />
     <Compile Include="Atomos\Pool\PoolException.cs" />
     <Compile Include="Atomos\Pool\PoolItem.cs" />
