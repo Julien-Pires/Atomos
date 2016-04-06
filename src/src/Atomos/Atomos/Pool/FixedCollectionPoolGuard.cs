@@ -33,11 +33,6 @@ namespace Atomos
             return _getCapacity(item) == _capacity;
         }
 
-        bool IPoolGuard.MustRegister()
-        {
-            throw new NotImplementedException();
-        }
-
         #endregion
     }
 }

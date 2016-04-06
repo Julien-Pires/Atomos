@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Reflection;
 using System.Collections.Generic;
 
@@ -15,6 +16,7 @@ namespace Atomos
     {
         #region Fields
 
+        private static readonly IPoolGuard[] EmptyGuards = new IPoolGuard[0];
         private static readonly Action<T> EmptyAction = c => { };
         private static readonly Action<T> DisposeAction = c => (c as IDisposable).Dispose();
         private static readonly Action<T> ResetAction = c => (c as IPoolItem).Reset();
@@ -22,7 +24,8 @@ namespace Atomos
 
         private bool _isDisposed;
         private readonly IPoolStorage<T> _storage;
-        private readonly IPoolGuard _storageGuard;
+        private readonly IStorageGuard _storageGuard;
+        private readonly IPoolGuard[] _poolGuards;
         private readonly IPoolStorageQuery _query;
         private readonly Func<T> _initializer;
         private readonly Action<T> _reset;
@@ -57,12 +60,14 @@ namespace Atomos
         {
         }
 
-        protected Pool(PoolSettings<T> settings, IPoolStorage<T> storage, IPoolGuard storageGuard, IPoolStorageQuery query)
+        protected Pool(PoolSettings<T> settings, IPoolStorage<T> storage, IEnumerable<IPoolGuard> guards, 
+            IPoolStorageQuery query)
         {
             _initializer = settings.Initializer ?? New<T>.Create;
             _reset = settings.Reset ?? ResetAction;
 
-            _storageGuard = storageGuard ?? CreateGuardStorage(settings);
+            _storageGuard = CreateStorageGuard(settings);
+            _poolGuards = guards != null ? guards.ToArray() : EmptyGuards;
             _storage = storage ?? new PoolStorage<T>();
             _query = query ?? DefaultPoolStorageQuery.Default;
 
@@ -75,16 +80,16 @@ namespace Atomos
 
                 _storage.Set(item, NullParameter);
             }
-        } 
+        }
 
         #endregion
 
         #region Initialize
 
-        private static IPoolGuard CreateGuardStorage(PoolSettings<T> settings)
+        private static IStorageGuard CreateStorageGuard(PoolSettings<T> settings)
         {
             PoolingMode mode = settings.Mode;
-            IPoolGuard storageGuard;
+            IStorageGuard storageGuard;
             switch(mode)
             {
                 case PoolingMode.Strict:
@@ -206,6 +211,12 @@ namespace Atomos
             if (!_storageGuard.CanSet(item, _storage))
                 throw new PoolException($"Failed to set {item}, guard rules not fullfilled");
 
+            for (int i = 0; i < _poolGuards.Length; i++)
+            {
+                if(!_poolGuards[i].CanSet(item, _storage))
+                    throw new PoolException($"Failed to set {item}, guard rules not fullfilled");
+            }
+
             _reset(item);
             _storage.Set(item, parameter);
         }
@@ -221,7 +232,13 @@ namespace Atomos
             if (!_storageGuard.CanGet(_storage))
                 throw new PoolException("Failed to get an item, guard rules not fullfilled");
 
-            T item = _storage.Get(parameter);
+            for (int i = 0; i < _poolGuards.Length; i++)
+            {
+                if(!_poolGuards[i].CanGet(_storage))
+                    throw new PoolException("Failed to get an item, guard rules not fullfilled");
+            }
+
+            T item = _query.Search(_storage, parameter);
             if (item != null)
                 return new PoolItem<T>(item, this);
 

@@ -9,5 +9,19 @@
         public CollectionPoolMode CollectionMode { get; set; }
 
         #endregion
+
+        #region Constructors
+
+        public CollectionPoolSettings()
+        {
+        }
+
+        public CollectionPoolSettings(CollectionPoolSettings<T> settings) : base(settings)
+        {
+            InitialCapacity = settings.InitialCapacity;
+            CollectionMode = settings.CollectionMode;
+        }  
+
+        #endregion
     }
 }

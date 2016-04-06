@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Atomos
+﻿namespace Atomos
 {
     internal sealed class DefaultPoolStorageQuery : IPoolStorageQuery
     {

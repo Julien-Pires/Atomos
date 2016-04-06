@@ -8,12 +8,6 @@
         #region Methods
 
         /// <summary>
-        /// Indicates that item registration is required on the pool storage
-        /// </summary>
-        /// <returns>Returns true if the item must be registered otherwise false</returns>
-        bool MustRegister();
-
-        /// <summary>
         /// Indicates that an item can be get from the pool storage
         /// </summary>
         /// <param name="storage">Storage used to perform the get operation</param>

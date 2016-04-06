@@ -1,6 +1,6 @@
 ﻿namespace Atomos
 {
-    internal class FlexiblePoolGuard : IPoolGuard
+    internal class FlexiblePoolGuard : IStorageGuard
     {
         #region Guards
 

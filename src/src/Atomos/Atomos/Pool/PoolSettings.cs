@@ -31,5 +31,21 @@ namespace Atomos
         public Action<T> Reset { get; set; }
 
         #endregion
+
+        #region Constructors
+
+        public PoolSettings()
+        {
+        }
+
+        public PoolSettings(PoolSettings<T> settings)
+        {
+            Mode = settings.Mode;
+            Capacity = settings.Capacity;
+            Initializer = settings.Initializer;
+            Reset = settings.Reset;
+        }  
+
+        #endregion
     }
 }
