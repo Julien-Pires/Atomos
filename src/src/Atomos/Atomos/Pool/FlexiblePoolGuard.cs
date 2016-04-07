@@ -1,6 +1,6 @@
 ﻿namespace Atomos
 {
-    internal class FlexiblePoolGuard : IStorageGuard
+    internal class FlexiblePoolGuard<TItem> : IStorageGuard<TItem> where TItem : class
     {
         #region Guards
 
@@ -9,12 +9,12 @@
             return false;
         }
 
-        public bool CanGet<T>(IPoolStorage<T> storage) where T : class
+        public bool CanGet(IPoolStorage<TItem> storage)
         {
             return true;
         }
 
-        public bool CanSet<T>(T item, IPoolStorage<T> storage) where T : class
+        public bool CanSet(TItem item, IPoolStorage<TItem> storage)
         {
             return !storage.IsAvailable(item);
         }

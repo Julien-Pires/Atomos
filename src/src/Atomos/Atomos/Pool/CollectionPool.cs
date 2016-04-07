@@ -3,12 +3,16 @@ using System.Collections;
 
 namespace Atomos
 {
-    public abstract class CollectionPool<TCollection> : Pool<TCollection>
+    public abstract class CollectionPool<TCollection> : BasePool<TCollection, int>
         where TCollection : class, ICollection
     {
         #region Constructors
 
-        protected CollectionPool(CollectionPoolSettings<TCollection> settings = null)
+        internal CollectionPool(CollectionPoolSettings<TCollection> settings, 
+            CollectionPoolItemHelper<TCollection> collectionHelper)
+            : base(settings, 
+                 CreateStorage(settings),
+                 CreateGuard())
         {
         }
 
@@ -16,19 +20,29 @@ namespace Atomos
 
         #region Initialization
 
-        public static IPoolGuard CreateGuard(CollectionPoolSettings<TCollection> settings)
+        public static IPoolStorage<TCollection> CreateStorage(CollectionPoolSettings<TCollection> settings)
+        {
+            return null;
+        } 
+
+        public static IPoolGuard<TCollection>[] CreateGuard(CollectionPoolSettings<TCollection> settings)
         {
             if (settings == null)
                 return null;
 
+            IPoolGuard<TCollection>[] guards;
             switch (settings.CollectionMode)
             {
+                case CollectionPoolMode.Fixed:
+                    guards = new[] {new FixedCollectionPoolGuard<TCollection>(settings.InitialCapacity, GetCapacity) };
+                    break;
+
                 default:
                     throw new ArgumentException($"{settings.CollectionMode} is not a valid pool collection mode");
             }
-        }
 
-        public abstract TCollection Create(int capacity);
+            return guards;
+        }
 
         #endregion
 

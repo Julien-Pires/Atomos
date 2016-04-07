@@ -10,7 +10,7 @@ namespace Atomos
     {
         #region Fields
 
-        private readonly Pool<T> _pool;
+        private readonly IPool<T> _pool;
         private bool _isDisposed;
 
         #endregion
@@ -26,7 +26,7 @@ namespace Atomos
 
         #region Constructors
 
-        internal PoolItem(T item, Pool<T> pool)
+        internal PoolItem(T item, IPool<T> pool)
         {
             Item = item;
             _pool = pool;

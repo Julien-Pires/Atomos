@@ -1,8 +1,7 @@
 ﻿namespace Atomos
 {
-    internal interface IStorageGuard : IPoolGuard
+    internal interface IStorageGuard<TItem> : IPoolGuard<TItem> where TItem : class
     {
-
         /// <summary>
         /// Indicates that item registration is required on the pool storage
         /// </summary>

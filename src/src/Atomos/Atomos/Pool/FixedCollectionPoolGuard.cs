@@ -1,19 +1,20 @@
 ﻿using System;
+using System.Collections;
 
 namespace Atomos
 {
-    internal class FixedCollectionPoolGuard : IPoolGuard
+    internal class FixedCollectionPoolGuard<TCollection> : IPoolGuard<TCollection> where TCollection : class, ICollection
     {
         #region Fields
 
         private readonly int _capacity;
-        private readonly Func<object, int> _getCapacity;
+        private readonly Func<TCollection, int> _getCapacity;
 
         #endregion
 
         #region Constructors
 
-        public FixedCollectionPoolGuard(int capacity, Func<object, int> getCapacity)
+        public FixedCollectionPoolGuard(int capacity, Func<TCollection, int> getCapacity)
         {
             _capacity = capacity;
             _getCapacity = getCapacity;
@@ -23,12 +24,12 @@ namespace Atomos
 
         #region Guard
 
-        bool IPoolGuard.CanGet<T>(IPoolStorage<T> storage)
+        public bool CanGet(IPoolStorage<TCollection> storage)
         {
             return true;
         }
 
-        bool IPoolGuard.CanSet<T>(T item, IPoolStorage<T> storage)
+        public bool CanSet(TCollection item, IPoolStorage<TCollection> storage)
         {
             return _getCapacity(item) == _capacity;
         }

@@ -6,7 +6,16 @@
 
         public ArrayPool(CollectionPoolSettings<T[]> settings = null)
         {
-        } 
+        }
+
+        #endregion
+
+        #region Initialization
+
+        protected override T[] Create(int capacity)
+        {
+            return null;
+        }
 
         #endregion
     }

@@ -3,7 +3,7 @@
 namespace Atomos.Tests.Pool
 {
     public abstract partial class Pool_Generic_Test<TPool, T> : IPool_Generic_Test<TPool, T>
-        where TPool : IPool<T>
+        where TPool : Pool<T>, IPool<T>
         where T : class, IPoolItem_Test, new()
     {
         #region Properties

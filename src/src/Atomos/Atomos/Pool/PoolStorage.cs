@@ -19,6 +19,8 @@ namespace Atomos
 
         public int Count => _availableItems.Count;
 
+        public T this[int index] => _availableItems[index];
+
         #endregion
 
         #region Enumerator
@@ -92,7 +94,7 @@ namespace Atomos
             return _availableItemsSet.Contains(item);
         }
 
-        public void Set<TParam>(T item, TParam parameter)
+        public void Set(T item)
         {
             _availableItems.Add(item);
             _availableItemsSet.Add(item);
@@ -100,7 +102,7 @@ namespace Atomos
             _version++;
         }
 
-        public T Get<TParam>(TParam parameter)
+        public T Get()
         {
             if (_availableItems.Count == 0)
                 return null;
