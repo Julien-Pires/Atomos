@@ -104,6 +104,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Pool\BasePool\BasePool.Builder.cs" />
     <Compile Include="Pool\CollectionPool\ArrayPool.Generic.Test.cs" />
     <Compile Include="Pool\CollectionPool\ArrayPool.Test.cs" />
     <Compile Include="Pool\CollectionPool\CollectionPool.Builder.cs" />
@@ -115,19 +116,17 @@
     <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Definite.Set.Cs" />
     <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Fixed.Get.Cs" />
     <Compile Include="Pool\CollectionPool\CollectionPool.Generic.Test.Fixed.Set.cs" />
+    <Compile Include="Pool\IPool\IPool.Builder.cs" />
     <Compile Include="Pool\IPool\IPool.Generic.Test.Dispose.cs" />
-    <Compile Include="Pool\Pool\Pool.Generic.Test.cs" />
-    <Compile Include="Pool\Pool\Pool.Generic.Test.Flexible.cs" />
-    <Compile Include="Pool\Pool\Pool.Generic.Test.Flexible.Reset.cs" />
+    <Compile Include="Pool\BasePool\BasePool.Generic.Test.cs" />
+    <Compile Include="Pool\BasePool\BasePool.Generic.Test.Flexible.Reset.cs" />
     <Compile Include="Pool\IPool\IPool.Generic.Test.PoolItem.Cast.cs" />
     <Compile Include="Pool\IPool\IPool.Generic.Test.PoolItem.Dispose.cs" />
     <Compile Include="Pool\IPool\IPool.Generic.Test.Set.cs" />
-    <Compile Include="Pool\Pool\Pool.Generic.Test.Strict.cs" />
-    <Compile Include="Pool\Pool\Pool.Generic.Test.Strict.Reset.cs" />
-    <Compile Include="Pool\Pool\Pool.Generic.Test.Strict.Set.cs" />
-    <Compile Include="Pool\IPool\IPoolItem.Test.cs" />
+    <Compile Include="Pool\BasePool\BasePool.Generic.Test.Strict.Reset.cs" />
+    <Compile Include="Pool\BasePool\BasePool.Generic.Test.Strict.Set.cs" />
     <Compile Include="Pool\Pool\Pool.Test.cs" />
-    <Compile Include="Pool\PoolItem.Test.cs" />
+    <Compile Include="Pool\Pool\PoolItem.Test.cs" />
     <Compile Include="Pool\SharedPool\SharedPool.Generic.Test.cs" />
     <Compile Include="Pool\SharedPool\SharedPool.Generic.Test.Default.cs" />
     <Compile Include="Pool\SharedPool\SharedPool.Generic.Test.Destroy.cs" />
@@ -139,7 +138,7 @@
     <None Include="packages.config" />
     <Compile Include="Pool\IPool\IPool.Generic.Test.Get.cs" />
     <Compile Include="Pool\IPool\IPool.Generic.Test.cs" />
-    <Compile Include="Pool\Pool\Pool.Generic.Test.Constructors.cs" />
+    <Compile Include="Pool\BasePool\BasePool.Generic.Test.Constructors.cs" />
     <Compile Include="Pool\IPool\IPool.Generic.Test.Reset.cs" />
     <Compile Include="Pool\SharedPool\SharedPool.Generic.Test.Get.cs" />
   </ItemGroup>
@@ -153,7 +152,7 @@
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Pool\Pool\Pool.Generic.Test.Flexible.Set.cs" />
+    <Compile Include="Pool\BasePool\BasePool.Generic.Test.Flexible.Set.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

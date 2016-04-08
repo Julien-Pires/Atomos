@@ -1,5 +1,4 @@
-﻿using System;
-using Xunit;
+﻿using Xunit;
 
 namespace Atomos.Tests.Pool
 {
@@ -8,17 +7,21 @@ namespace Atomos.Tests.Pool
         [Fact]
         public void Dispose_Item_IsAvailable()
         {
-            using (PoolItem<T> item = Pool.Get())
+            TPool pool = Build();
+
+            using (PoolItem<T> item = pool.Get())
             {
             }
 
-            Assert.Equal(1, Pool.Count);
+            Assert.Equal(1, pool.Count);
         }
 
         [Fact]
         public void Dipose_Item_Twice_DoesNotThrowException()
         {
-            PoolItem<T> item = Pool.Get();
+            TPool pool = Build();
+
+            PoolItem<T> item = pool.Get();
             item.Dispose();
             item.Dispose();
         }
@@ -26,8 +29,10 @@ namespace Atomos.Tests.Pool
         [Fact]
         public void Dispose_ReleasedItem_ThrowException()
         {
-            PoolItem<T> item = Pool.Get();
-            Pool.Set(item);
+            TPool pool = Build();
+
+            PoolItem<T> item = pool.Get();
+            pool.Set(item);
 
             Assert.Throws<PoolException>(() => item.Dispose());
         }

@@ -13,7 +13,6 @@ namespace Atomos.Tests.Pool
 
         [Theory]
         [InlineData(0)]
-        [InlineData(10)]
         [InlineData(5000)]
         public void Set_WhenAnyModeAndFlexibleAndAnyItem_WithSuccess(int capacity)
         {

@@ -7,7 +7,6 @@ namespace Atomos.Tests.Pool
         [Theory]
         [InlineData(0)]
         [InlineData(10)]
-        [InlineData(100)]
         public void Get_WhenFixedModeAndNoParameter_WithInitialCapacity(int initialCapacity)
         {
             TPool pool = Build(CollectionPoolMode.Fixed, initialCapacity);
@@ -20,7 +19,6 @@ namespace Atomos.Tests.Pool
         [Theory]
         [InlineData(0)]
         [InlineData(10)]
-        [InlineData(100)]
         public void Get_WhenFixedModeAndParameter_WithInitialCapacity(int initialCapacity)
         {
             TPool pool = Build(CollectionPoolMode.Fixed, initialCapacity);
@@ -32,7 +30,6 @@ namespace Atomos.Tests.Pool
 
         [Theory]
         [InlineData(0, 111)]
-        [InlineData(10, 222)]
         [InlineData(100, 333)]
         public void Get_WhenFixedModeAndParameterIsDifferent_WithInitialCapacity(int initialCapacity, int parameter)
         {
@@ -41,6 +38,7 @@ namespace Atomos.Tests.Pool
 
             Assert.NotNull(item);
             Assert.Equal(initialCapacity, GetCapacity(item));
+            Assert.NotEqual(parameter, GetCapacity(item));
         }
     }
 }

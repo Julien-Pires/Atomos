@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+
 using Xunit;
 
 namespace Atomos.Tests.Pool
@@ -13,28 +14,34 @@ namespace Atomos.Tests.Pool
         [InlineData(50000, 1)]
         public void Set_SingleItems(int itemsCount, int count)
         {
+            TPool pool = Build();
+
             for (int i = 0; i < itemsCount; i++)
             {
-                PoolItem<T> item = Pool.Get();
-                Pool.Set(item);
+                PoolItem<T> item = pool.Get();
+                pool.Set(item);
             }
 
-            Assert.Equal(count, Pool.Count);
+            Assert.Equal(count, pool.Count);
         }
 
         [Fact]
         public void Set_SingleItemTwice_ThrowException()
         {
-            PoolItem<T> item = Pool.Get();
-            Pool.Set(item);
+            TPool pool = Build();
 
-            Assert.Throws<PoolException>(() => Pool.Set(item));
+            PoolItem<T> item = pool.Get();
+            pool.Set(item);
+
+            Assert.Throws<PoolException>(() => pool.Set(item));
         }
 
         [Fact]
         public void Set_NullSingleItems_ThrowException()
         {
-            Assert.Throws<ArgumentNullException>(() => Pool.Set((T)null));
+            TPool pool = Build();
+
+            Assert.Throws<ArgumentNullException>(() => pool.Set((T)null));
         }
 
         [Theory]
@@ -44,27 +51,33 @@ namespace Atomos.Tests.Pool
         [InlineData(50000, 1)]
         public void Set_MultipleItems(int itemsCount, int count)
         {
-            for(int i = 0; i < itemsCount; i++)
+            TPool pool = Build();
+
+            for (int i = 0; i < itemsCount; i++)
             {
-                T[] items = { Pool.Get() };
-                Pool.Set(items);
+                T[] items = { pool.Get() };
+                pool.Set(items);
             }
 
-            Assert.Equal(count, Pool.Count);
+            Assert.Equal(count, pool.Count);
         }
 
         [Fact]
         public void Set_MultipleItemTwice_ThrowException()
         {
-            T item = Pool.Get();
+            TPool pool = Build();
+
+            T item = pool.Get();
             
-            Assert.Throws<PoolException>(() => Pool.Set(new []{ item, item }));
+            Assert.Throws<PoolException>(() => pool.Set(new []{ item, item }));
         }
 
         [Fact]
         public void Set_NullMultipleItems_ThrowException()
         {
-            Assert.Throws<ArgumentNullException>(() => Pool.Set((IEnumerable<T>)null));
+            TPool pool = Build();
+
+            Assert.Throws<ArgumentNullException>(() => pool.Set((IEnumerable<T>)null));
         }
 
         [Theory]
@@ -74,14 +87,16 @@ namespace Atomos.Tests.Pool
         [InlineData(50000, 50000)]
         public void Set_SingleItems_TotalAvailable(int itemsCount, int count)
         {
+            TPool pool = Build();
+
             List<PoolItem<T>> itemsList = new List<PoolItem<T>>(itemsCount);
             for (int i = 0; i < itemsCount; i++)
-                itemsList.Add(Pool.Get());
+                itemsList.Add(pool.Get());
 
             for(int i = 0; i < itemsCount; i++)
-                Pool.Set(itemsList[i]);
+                pool.Set(itemsList[i]);
 
-            Assert.Equal(count, Pool.Count);
+            Assert.Equal(count, pool.Count);
         }
 
         [Theory]
@@ -91,13 +106,15 @@ namespace Atomos.Tests.Pool
         [InlineData(50000, 50000)]
         public void Set_MultipleItems_TotalAvailable(int itemsCount, int count)
         {
+            TPool pool = Build();
+
             List<T> itemsList = new List<T>(itemsCount);
             for (int i = 0; i < itemsCount; i++)
-                itemsList.Add(Pool.Get());
+                itemsList.Add(pool.Get());
 
-            Pool.Set(itemsList);
+            pool.Set(itemsList);
 
-            Assert.Equal(count, Pool.Count);
+            Assert.Equal(count, pool.Count);
         }
     }
 }

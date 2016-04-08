@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Atomos.Tests.Pool
+﻿namespace Atomos.Tests.Pool
 {
     public abstract partial class IPool_Generic_Test<TPool, T>
         where TPool : IPool<T>
@@ -8,15 +6,24 @@ namespace Atomos.Tests.Pool
     {
         #region Fields
 
-        protected readonly TPool Pool;
+        protected readonly IPool_Builder<TPool, T> Builder;
 
         #endregion
 
         #region Constructors
 
-        protected IPool_Generic_Test(Func<TPool> factory)
+        protected IPool_Generic_Test(IPool_Builder<TPool, T> builder)
         {
-            Pool = factory();
+            Builder = builder;
+        }
+
+        #endregion
+
+        #region Builder
+
+        protected TPool Build()
+        {
+            return Builder.Build();
         }
 
         #endregion

@@ -7,7 +7,9 @@ namespace Atomos.Tests.Pool
         [Fact]
         public void Cast_Success()
         {
-            PoolItem<T> item = Pool.Get();
+            TPool pool = Build();
+
+            PoolItem<T> item = pool.Get();
 
             Assert.NotNull((T)item);
         }
@@ -15,7 +17,9 @@ namespace Atomos.Tests.Pool
         [Fact]
         public void Cast_AfterDisposed_ThrowException()
         {
-            PoolItem<T> item = Pool.Get();
+            TPool pool = Build();
+
+            PoolItem<T> item = pool.Get();
             item.Dispose();
 
             Assert.Null((T)item);

@@ -1,6 +1,8 @@
-﻿namespace Atomos.Tests.Pool
+﻿using System;
+
+namespace Atomos.Tests.Pool
 {
-    public class PoolItem_Test : IPoolItem_Test
+    public sealed class PoolItem_Test : IDisposable, IPoolItem
     {
         #region Properties
 
@@ -22,6 +24,7 @@
         public void Reset()
         {
             IsReset = true;
+            Value = -1;
         }
 
         #endregion

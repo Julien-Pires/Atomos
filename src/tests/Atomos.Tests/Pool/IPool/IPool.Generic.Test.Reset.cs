@@ -11,20 +11,24 @@ namespace Atomos.Tests.Pool
         [InlineData(1000, 0)]
         public void Reset_DestroyItems(int itemCount, int availableItems)
         {
+            TPool pool = Build();
+
             for (int i = 0; i < itemCount; i++)
-                Pool.Get();
+                pool.Get();
 
-            Pool.Reset(true);
+            pool.Reset(true);
 
-            Assert.Equal(availableItems, Pool.Count);
+            Assert.Equal(availableItems, pool.Count);
         }
 
         [Fact]
         public void Reset_CallResetOnItems()
         {
-            PoolItem<T> item = Pool.Get();
-            Pool.Set(item);
-            Pool.Reset();
+            TPool pool = Build();
+
+            PoolItem<T> item = pool.Get();
+            pool.Set(item);
+            pool.Reset();
 
             Assert.True(IsReset(item));
         }
@@ -32,9 +36,11 @@ namespace Atomos.Tests.Pool
         [Fact]
         public void Reset_DisposeItems_WhenDestroyed()
         {
-            PoolItem<T> item = Pool.Get();
-            Pool.Set(item);
-            Pool.Reset(true);
+            TPool pool = Build();
+
+            PoolItem<T> item = pool.Get();
+            pool.Set(item);
+            pool.Reset(true);
 
             Assert.True(IsDisposed(item));
         }

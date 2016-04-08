@@ -8,9 +8,11 @@ namespace Atomos.Tests.Pool
         [Fact]
         public void Dispose_Success()
         {
-            PoolItem<T> item = Pool.Get();
-            Pool.Set(item);
-            Pool.Dispose();
+            TPool pool = Build();
+
+            PoolItem<T> item = pool.Get();
+            pool.Set(item);
+            pool.Dispose();
 
             Assert.True(IsDisposed(item));
         }
@@ -18,42 +20,52 @@ namespace Atomos.Tests.Pool
         [Fact]
         public void Dispose_Twice_DoesNotThrowException()
         {
-            Pool.Dispose();
-            Pool.Dispose();
+            TPool pool = Build();
+
+            pool.Dispose();
+            pool.Dispose();
         }
 
         [Fact]
         public void Dispose_CallGet_ThrowException()
         {
-            Pool.Dispose();
+            TPool pool = Build();
 
-            Assert.Throws<ObjectDisposedException>(() => Pool.Get());
+            pool.Dispose();
+
+            Assert.Throws<ObjectDisposedException>(() => pool.Get());
         }
 
         [Fact]
         public void Dispose_CallSet_ThrowException()
         {
-            PoolItem<T> item = Pool.Get();
-            Pool.Dispose();
+            TPool pool = Build();
 
-            Assert.Throws<ObjectDisposedException>(() => Pool.Set(item));
+            PoolItem<T> item = pool.Get();
+            pool.Dispose();
+
+            Assert.Throws<ObjectDisposedException>(() => pool.Set(item));
         }
 
         [Fact]
         public void Dispose_CallSetMultiple_ThrowException()
         {
-            PoolItem<T> item = Pool.Get();
-            Pool.Dispose();
+            TPool pool = Build();
 
-            Assert.Throws<ObjectDisposedException>(() => Pool.Set(new []{ (T)item }));
+            PoolItem<T> item = pool.Get();
+            pool.Dispose();
+
+            Assert.Throws<ObjectDisposedException>(() => pool.Set(new []{ (T)item }));
         }
 
         [Fact]
         public void Dispose_CallReset_ThrowException()
         {
-            Pool.Dispose();
+            TPool pool = Build();
 
-            Assert.Throws<ObjectDisposedException>(() => Pool.Reset());
+            pool.Dispose();
+
+            Assert.Throws<ObjectDisposedException>(() => pool.Reset());
         }
     }
 }
