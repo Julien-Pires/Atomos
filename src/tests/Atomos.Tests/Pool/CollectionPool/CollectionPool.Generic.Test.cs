@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Atomos.Tests.Pool
 {
-    public abstract partial class CollectionPool_Generic_Test<TPool, TItem> : BasePool_Generic_Test<TPool, TItem, int>
+    public abstract partial class CollectionPool_Generic_Test<TPool, TItem> : BasePool_Generic_Test<TPool, TItem, int?>
         where TPool : CollectionPool<TItem>, IPool<TItem>
         where TItem : class, ICollection
     {

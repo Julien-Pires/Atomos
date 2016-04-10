@@ -1,20 +1,20 @@
 ﻿namespace Atomos
 {
-    public sealed class ArrayPool<T> : CollectionPool<T[]>
+    public sealed partial class ArrayPool<T> : CollectionPool<T[]>
     {
-        #region Constructors
+        #region Fields
 
-        public ArrayPool(CollectionPoolSettings<T[]> settings = null)
-        {
-        }
+        private static readonly ArrayPoolHelper Helper = new ArrayPoolHelper();
 
         #endregion
 
-        #region Initialization
+        #region Constructors
 
-        protected override T[] Create(int capacity)
+        public ArrayPool(CollectionPoolSettings<T[]> settings = null)
+            : base(settings, 
+                  new CollectionPoolItemFactory<T[]>(c => new T[c], (settings?.InitialCapacity).GetValueOrDefault()), 
+                  Helper)
         {
-            return null;
         }
 
         #endregion

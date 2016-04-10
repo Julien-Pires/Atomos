@@ -27,7 +27,7 @@ namespace Atomos
         private readonly IStorageGuard<TItem> _storageGuard;
         private readonly IPoolGuard<TItem>[] _poolGuards;
         private readonly IPoolStorageQuery<TItem, TParam> _query;
-        private readonly Func<TItem> _initializer;
+        private readonly IPoolItemFactory<TItem, TParam> _itemFactory;
         private readonly Action<TItem> _reset;
 
         #endregion
@@ -53,9 +53,11 @@ namespace Atomos
         }
 
         protected BasePool(PoolSettings<TItem> settings, IPoolStorage<TItem> storage, IPoolStorageQuery<TItem, TParam> query,
-            IEnumerable<IPoolGuard<TItem>> guards = null)
+            IEnumerable<IPoolGuard<TItem>> guards = null, IPoolItemFactory<TItem, TParam> itemFactory = null)
         {
-            _initializer = settings.Initializer ?? New<TItem>.Create;
+            settings = settings ?? new PoolSettings<TItem>();
+
+            _itemFactory = itemFactory ?? new DefaultPoolItemFactory<TItem, TParam>(settings.Initializer ?? New<TItem>.Create);
             _reset = settings.Reset ?? ResetAction;
 
             _storageGuard = CreateStorageGuard(settings);
@@ -66,7 +68,7 @@ namespace Atomos
             _storage.SetCapacity(settings.Capacity);
             for (int i = 0; i < settings.Capacity; i++)
             {
-                TItem item = _initializer();
+                TItem item = _itemFactory.Create(default(TParam));
                 if (_storageGuard.MustRegister())
                     _storage.Register(item);
 
@@ -203,11 +205,8 @@ namespace Atomos
             if (!_storageGuard.CanSet(item, _storage))
                 throw new PoolException($"Failed to set {item}, guard rules not fullfilled");
 
-            for (int i = 0; i < _poolGuards.Length; i++)
-            {
-                if(!_poolGuards[i].CanSet(item, _storage))
-                    throw new PoolException($"Failed to set {item}, guard rules not fullfilled");
-            }
+            if (_poolGuards.Any(t => !t.CanSet(item, _storage)))
+                throw new PoolException($"Failed to set {item}, guard rules not fullfilled");
 
             _reset(item);
             _storage.Set(item);
@@ -224,17 +223,14 @@ namespace Atomos
             if (!_storageGuard.CanGet(_storage))
                 throw new PoolException("Failed to get an item, guard rules not fullfilled");
 
-            for (int i = 0; i < _poolGuards.Length; i++)
-            {
-                if(!_poolGuards[i].CanGet(_storage))
-                    throw new PoolException("Failed to get an item, guard rules not fullfilled");
-            }
+            if (_poolGuards.Any(t => !t.CanGet(_storage)))
+                throw new PoolException("Failed to get an item, guard rules not fullfilled");
 
             TItem item = _query.Search(_storage, parameter);
             if (item != null)
                 return new PoolItem<TItem>(item, this);
 
-            item = _initializer();
+            item = _itemFactory.Create(parameter);
             if (_storageGuard.MustRegister())
                 _storage.Register(item);
 

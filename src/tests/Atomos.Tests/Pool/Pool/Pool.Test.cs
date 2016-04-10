@@ -7,7 +7,7 @@ namespace Atomos.Tests.Pool
     {
         #region Constructors
 
-        protected Pool_Test() : base(new PoolBuilder(c => new Pool<PoolItem_Test>(c)))
+        public Pool_Test() : base(new PoolBuilder(c => new Pool<PoolItem_Test>(c)))
         {
         }
 
@@ -27,7 +27,7 @@ namespace Atomos.Tests.Pool
 
         protected override int GetValue(PoolItem_Test item) => item.Value;
 
-        protected override void ResetItem(PoolItem_Test item) => item.Reset();
+        protected override void ResetItem(PoolItem_Test item) => item.Value = 0;
 
         #endregion
     }

@@ -20,7 +20,7 @@
 
         public TItem Search(IPoolStorage<TItem> storage, TParam parameter)
         {
-            return storage.Count > 0 ? storage[storage.Count - 1] : null;
+            return storage.Get();
         }
 
         #endregion
