@@ -107,42 +107,43 @@
   </PropertyGroup>
   <ItemGroup>
     <!-- A reference to the entire .NET Framework is automatically included -->
-    <Compile Include="Atomos\Pool\ArrayPool.cs" />
-    <Compile Include="Atomos\Pool\ArrayPoolHelper.cs" />
-    <Compile Include="Atomos\Pool\CollectionPool.cs" />
-    <Compile Include="Atomos\Pool\CollectionPoolItemFactory.cs" />
-    <Compile Include="Atomos\Pool\DefaultPoolItemFactory.cs" />
-    <Compile Include="Atomos\Pool\FixedCollectionPoolGuard.cs" />
-    <Compile Include="Atomos\Pool\CollectionPoolMode.cs" />
-    <Compile Include="Atomos\Pool\CollectionPoolSettings.cs" />
-    <Compile Include="Atomos\Pool\DefaultPoolStorageQuery.cs" />
-    <Compile Include="Atomos\Pool\FlexiblePoolGuard.cs" />
-    <Compile Include="Atomos\Pool\ICollectionPoolHelper.cs" />
-    <Compile Include="Atomos\Pool\IKeyedPoolStorage.cs" />
-    <Compile Include="Atomos\Pool\IPool.cs" />
-    <Compile Include="Atomos\Pool\IPoolGuard.cs" />
-    <Compile Include="Atomos\Pool\IPoolItem.cs" />
-    <Compile Include="Atomos\Pool\IPoolItemFactory.cs" />
-    <Compile Include="Atomos\Pool\IPoolStorageQuery.cs" />
-    <Compile Include="Atomos\Pool\IStorageGuard.cs" />
-    <Compile Include="Atomos\Pool\KeyedPoolStorage.cs" />
-    <Compile Include="Atomos\Pool\KeyedPoolStorageItem.cs" />
-    <Compile Include="Atomos\Pool\Pool.cs" />
-    <Compile Include="Atomos\Pool\PoolException.cs" />
-    <Compile Include="Atomos\Pool\PoolItem.cs" />
-    <Compile Include="Atomos\Pool\PoolStorage.cs" />
-    <Compile Include="Atomos\Pool\SharedPool.cs" />
-    <Compile Include="Atomos\Pool\StrictPoolGuard.cs" />
-    <Compile Include="Atomos\Pool\PoolStorage.Enumerator.cs" />
+    <Compile Include="Atomos\Collections\Extension\DictionaryExtension.cs" />
+    <Compile Include="Atomos\Core\Pool\ArrayPool.cs" />
+    <Compile Include="Atomos\Core\Pool\ArrayPoolHelper.cs" />
+    <Compile Include="Atomos\Core\Pool\CollectionPool.cs" />
+    <Compile Include="Atomos\Core\Pool\CollectionPoolItemFactory.cs" />
+    <Compile Include="Atomos\Core\Pool\DefaultPoolItemFactory.cs" />
+    <Compile Include="Atomos\Core\Pool\FixedCollectionPoolGuard.cs" />
+    <Compile Include="Atomos\Core\Pool\CollectionPoolMode.cs" />
+    <Compile Include="Atomos\Core\Pool\CollectionPoolSettings.cs" />
+    <Compile Include="Atomos\Core\Pool\DefaultPoolStorageQuery.cs" />
+    <Compile Include="Atomos\Core\Pool\FlexiblePoolGuard.cs" />
+    <Compile Include="Atomos\Core\Pool\ICollectionPoolHelper.cs" />
+    <Compile Include="Atomos\Core\Pool\IPool.cs" />
+    <Compile Include="Atomos\Core\Pool\IPoolGuard.cs" />
+    <Compile Include="Atomos\Core\Pool\IPoolItem.cs" />
+    <Compile Include="Atomos\Core\Pool\IPoolItemFactory.cs" />
+    <Compile Include="Atomos\Core\Pool\IPoolStorageQuery.cs" />
+    <Compile Include="Atomos\Core\Pool\IStorageGuard.cs" />
+    <Compile Include="Atomos\Core\Pool\KeyedPoolStorage.cs" />
+    <Compile Include="Atomos\Core\Pool\KeyedPoolStorageItem.cs" />
+    <Compile Include="Atomos\Core\Pool\Pool.cs" />
+    <Compile Include="Atomos\Core\Pool\PoolException.cs" />
+    <Compile Include="Atomos\Core\Pool\PoolItem.cs" />
+    <Compile Include="Atomos\Core\Pool\PoolStorage.cs" />
+    <Compile Include="Atomos\Core\Pool\SharedPool.cs" />
+    <Compile Include="Atomos\Core\Pool\StrictPoolGuard.cs" />
+    <Compile Include="Atomos\Core\Pool\PoolStorage.Enumerator.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Atomos\Pool\IPoolStorage.cs" />
+    <Compile Include="Atomos\Core\Pool\IPoolStorage.cs" />
     <Compile Include="Atomos\New.cs" />
-    <Compile Include="Atomos\Pool\BasePool.cs" />
-    <Compile Include="Atomos\Pool\PoolingMode.cs" />
-    <Compile Include="Atomos\Pool\PoolSettings.cs" />
+    <Compile Include="Atomos\Core\Pool\BasePool.cs" />
+    <Compile Include="Atomos\Core\Pool\PoolingMode.cs" />
+    <Compile Include="Atomos\Core\Pool\PoolSettings.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\Portable\$(TargetFrameworkVersion)\Microsoft.Portable.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

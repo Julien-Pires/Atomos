@@ -19,8 +19,6 @@ namespace Atomos
 
         public int Count => _availableItems.Count;
 
-        public T this[int index] => _availableItems[index];
-
         #endregion
 
         #region Enumerator

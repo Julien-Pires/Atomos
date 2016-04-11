@@ -15,8 +15,6 @@ namespace Atomos
         /// </summary>
         int Count { get; }
 
-        T this[int index] { get; }
-
         #endregion
 
         #region Methods

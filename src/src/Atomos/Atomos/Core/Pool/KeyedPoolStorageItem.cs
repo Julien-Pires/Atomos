@@ -2,13 +2,12 @@
 {
     internal partial class KeyedPoolStorage<TItem, TKey>
     {
-        private class KeyedPoolStorageItem
+        internal class KeyedPoolStorageItem
         {
             #region Methods
 
             public TItem Get()
             {
-                
             }
 
             public void Set(TItem item)
