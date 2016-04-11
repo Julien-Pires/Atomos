@@ -118,12 +118,15 @@
     <Compile Include="Atomos\Pool\DefaultPoolStorageQuery.cs" />
     <Compile Include="Atomos\Pool\FlexiblePoolGuard.cs" />
     <Compile Include="Atomos\Pool\ICollectionPoolHelper.cs" />
+    <Compile Include="Atomos\Pool\IKeyedPoolStorage.cs" />
     <Compile Include="Atomos\Pool\IPool.cs" />
     <Compile Include="Atomos\Pool\IPoolGuard.cs" />
     <Compile Include="Atomos\Pool\IPoolItem.cs" />
     <Compile Include="Atomos\Pool\IPoolItemFactory.cs" />
     <Compile Include="Atomos\Pool\IPoolStorageQuery.cs" />
     <Compile Include="Atomos\Pool\IStorageGuard.cs" />
+    <Compile Include="Atomos\Pool\KeyedPoolStorage.cs" />
+    <Compile Include="Atomos\Pool\KeyedPoolStorageItem.cs" />
     <Compile Include="Atomos\Pool\Pool.cs" />
     <Compile Include="Atomos\Pool\PoolException.cs" />
     <Compile Include="Atomos\Pool\PoolItem.cs" />

@@ -16,11 +16,11 @@ namespace Atomos
 
         #region Constructors
 
-        public CollectionPoolItemFactory(Func<int, TCollection> factory, int capacity, bool useParameter = false)
+        public CollectionPoolItemFactory(Func<int, TCollection> factory, CollectionPoolSettings<TCollection> settings)
         {
             _factory = factory;
-            _capacity = capacity;
-            _useParameter = useParameter;
+            _capacity = (settings?.InitialCapacity).GetValueOrDefault();
+            _useParameter = (settings?.CollectionMode ?? CollectionPoolMode.Any) == CollectionPoolMode.Definite;
         }
 
         #endregion

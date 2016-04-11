@@ -12,7 +12,7 @@
 
         public ArrayPool(CollectionPoolSettings<T[]> settings = null)
             : base(settings, 
-                  new CollectionPoolItemFactory<T[]>(c => new T[c], (settings?.InitialCapacity).GetValueOrDefault()), 
+                  new CollectionPoolItemFactory<T[]>(c => new T[c], settings),
                   Helper)
         {
         }
