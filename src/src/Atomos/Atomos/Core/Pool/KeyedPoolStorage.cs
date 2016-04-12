@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using Atomos.Collections.Extension;
 
 namespace Atomos
 {
@@ -10,15 +12,25 @@ namespace Atomos
         #region Fields
 
         private int _version;
-        private List<KeyedPoolStorageItem> _availableItems = new List<KeyedPoolStorageItem>();
-        private readonly Dictionary<TItem, TKey> _availableItemsSet = new Dictionary<TItem, TKey>();
-        private readonly Dictionary<TItem, TKey> _registeredItems = new Dictionary<TItem, TKey>();
+        private readonly IKeySelector<TItem, TKey> _keySelector; 
+        private readonly List<KeyedContainer> _availableItems = new List<KeyedContainer>();
+        private readonly HashSet<TItem> _availableItemsSet = new HashSet<TItem>();
+        private readonly HashSet<TItem> _registeredItems = new HashSet<TItem>();
+
+        #endregion
+
+        #region Constructors
+
+        public KeyedPoolStorage(IKeySelector<TItem, TKey> keySelector)
+        {
+            _keySelector = keySelector;
+        } 
 
         #endregion
 
         #region Properties
 
-        public KeyedPoolStorageItem this[int index] => _availableItems[index];
+        public KeyedContainer this[int index] => _availableItems[index];
 
         public int Count => _availableItems.Count;
 
@@ -51,13 +63,37 @@ namespace Atomos
 
         public void ResetItems()
         {
-            _registeredItems
             _availableItemsSet.UnionWith(_registeredItems);
-            _availableItemsSet.UnionWith(_registeredItems);
-            _availableItems.Clear();
-            _availableItems.AddRange(_availableItemsSet);
+            foreach (KeyedContainer item in _availableItems)
+                item.Clear();
+
+            foreach (TItem item in _availableItemsSet)
+                AddAvailableItems(item);
+
+            _availableItems.RemoveAll(c => !c.HasValue);
 
             _version++;
+        }
+
+        private void AddAvailableItems(TItem item)
+        {
+            if(!_availableItemsSet.Add(item))
+                return;
+
+            KeyedContainer container = EnsureKeyContainer(_keySelector.GetKey(item));
+            container.Set(item);
+        }
+
+        private KeyedContainer EnsureKeyContainer(TKey key)
+        {
+            int index = _availableItems.BinarySearch(key, (item, value) => Comparer<TKey>.Default.Compare(item.Key, value));
+            if (index > -1)
+                return _availableItems[index];
+
+            KeyedContainer container = new KeyedContainer(key);
+            _availableItems.Insert(~index, container);
+
+            return container;
         }
 
         public void SetCapacity(int capacity)
@@ -65,14 +101,12 @@ namespace Atomos
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(capacity));
 
-            List<KeyedPoolStorageItem> availableItems = new List<KeyedPoolStorageItem>(capacity);
-            int minCount = Math.Min(capacity, _availableItems.Count);
-            for (int i = 0; i < minCount; i++)
-                availableItems.Add(_availableItems[i]);
-            _availableItems = availableItems;
-
+            _availableItems.Clear();
             _availableItemsSet.Clear();
-            _availableItemsSet.UnionWith(_availableItems);
+
+            var availableItems = _availableItemsSet.Take(Math.Min(capacity, _availableItemsSet.Count)).ToArray();
+            foreach (TItem item in availableItems)
+                AddAvailableItems(item);
 
             _version++;
         }
@@ -83,16 +117,19 @@ namespace Atomos
 
         public void Register(TItem item)
         {
-            throw new NotImplementedException();
+            _registeredItems.Add(item);
+            _version++;
         }
 
-        public bool IsRegistered(TItem item) => _registeredItems.ContainsKey(item);
+        public bool IsRegistered(TItem item) => _registeredItems.Contains(item);
 
-        public bool IsAvailable(TItem item) => _availableItemsSet.ContainsKey(item);
+        public bool IsAvailable(TItem item) => _availableItemsSet.Contains(item);
 
         public TItem Get(TKey key)
         {
-            throw new NotImplementedException();
+            int index = _availableItems.BinarySearch(key, (item, value) => Comparer<TKey>.Default.Compare(item.Key, value));
+
+            return index > -1 ? _availableItems[index].Get() : null;
         }
 
         TItem IPoolStorage<TItem>.Get()
@@ -102,7 +139,7 @@ namespace Atomos
 
         public void Set(TItem item)
         {
-            throw new NotImplementedException();
+            AddAvailableItems(item);
         }
 
         #endregion

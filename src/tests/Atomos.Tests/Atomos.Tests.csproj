@@ -105,6 +105,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Collections\Extension\DictionaryExtension.Test.cs" />
+    <Compile Include="Collections\Extension\ListExrtension.Test.cs" />
     <Compile Include="Core\Pool\BasePool\BasePool.Builder.cs" />
     <Compile Include="Core\Pool\CollectionPool\ArrayPool.Generic.Test.cs" />
     <Compile Include="Core\Pool\CollectionPool\ArrayPool.Test.cs" />
