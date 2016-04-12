@@ -209,7 +209,7 @@ namespace Atomos
                 throw new PoolException($"Failed to set {item}, guard rules not fullfilled");
 
             _reset(item);
-            _storage.Set(item);
+            _query.Insert(_storage, item, parameter);
         }
 
         /// <summary>

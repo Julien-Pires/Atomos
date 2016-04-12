@@ -24,5 +24,14 @@
         }
 
         #endregion
+
+        #region Insert
+
+        public void Insert(IPoolStorage<TItem> storage, TItem item, TParam parameter)
+        {
+            storage.Set(item);
+        }
+
+        #endregion
     }
 }

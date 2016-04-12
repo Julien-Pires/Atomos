@@ -14,6 +14,10 @@ namespace Atomos
 
             #region Properties
 
+            internal TItem this[int index] => _items[index];
+
+            internal int Count => _items.Count;
+
             public TKey Key { get; }
 
             public bool HasValue => _items.Count > 0;

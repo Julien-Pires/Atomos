@@ -11,7 +11,7 @@ namespace Atomos
         internal CollectionPool(CollectionPoolSettings<TCollection> settings, IPoolItemFactory<TCollection, int?> collectionFactory, 
             ICollectionPoolHelper<TCollection> collectionHelper)
             : base(settings,
-                 CreateStorage(settings),
+                 CreateStorage(settings, collectionHelper),
                  CreateQuery(settings),
                  CreateGuard(settings, collectionHelper),
                  collectionFactory)
@@ -22,7 +22,8 @@ namespace Atomos
 
         #region Initialization
 
-        public static IPoolStorage<TCollection> CreateStorage(CollectionPoolSettings<TCollection> settings)
+        public static IPoolStorage<TCollection> CreateStorage(CollectionPoolSettings<TCollection> settings,
+            ICollectionPoolHelper<TCollection> collectionHelper)
         {
             IPoolStorage<TCollection> storage;
             CollectionPoolMode mode = settings?.CollectionMode ?? default(CollectionPoolMode);
@@ -31,6 +32,10 @@ namespace Atomos
                 case CollectionPoolMode.Any:
                 case CollectionPoolMode.Fixed:
                     storage = new PoolStorage<TCollection>();
+                    break;
+
+                case CollectionPoolMode.Definite:
+                    storage = new KeyedPoolStorage<TCollection, int>(new DefaultKeySelector<TCollection, int>(collectionHelper.GetCapacity));
                     break;
 
                 default:
@@ -58,7 +63,8 @@ namespace Atomos
             return query;
         }
 
-        public static IPoolGuard<TCollection>[] CreateGuard(CollectionPoolSettings<TCollection> settings, ICollectionPoolHelper<TCollection> collectionHelper)
+        public static IPoolGuard<TCollection>[] CreateGuard(CollectionPoolSettings<TCollection> settings, 
+            ICollectionPoolHelper<TCollection> collectionHelper)
         {
             IPoolGuard<TCollection>[] guards;
             int initialCapacity = settings?.InitialCapacity ?? 0;
@@ -89,7 +95,7 @@ namespace Atomos
 
         public TCollection Get(int capacity)
         {
-            return null;
+            return Get((int?)capacity);
         }
 
         #endregion

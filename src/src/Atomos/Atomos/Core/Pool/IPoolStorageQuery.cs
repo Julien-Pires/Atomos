@@ -6,6 +6,8 @@
 
         TItem Search(IPoolStorage<TItem> storage, TParam parameter);
 
+        void Insert(IPoolStorage<TItem> storage, TItem item, TParam parameter);
+
         #endregion
     }
 }

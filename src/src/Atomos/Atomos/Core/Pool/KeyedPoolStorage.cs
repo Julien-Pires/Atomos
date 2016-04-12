@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using Atomos.Collections.Extension;
 
 namespace Atomos
@@ -40,7 +40,7 @@ namespace Atomos
 
         public IEnumerator<TItem> GetEnumerator()
         {
-            throw new System.NotImplementedException();
+            return new Enumerator(this);
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -63,11 +63,13 @@ namespace Atomos
 
         public void ResetItems()
         {
-            _availableItemsSet.UnionWith(_registeredItems);
             foreach (KeyedContainer item in _availableItems)
                 item.Clear();
 
-            foreach (TItem item in _availableItemsSet)
+            var availableItems = _availableItemsSet.Union(_registeredItems).ToArray();
+            _availableItemsSet.Clear();
+
+            foreach (TItem item in availableItems)
                 AddAvailableItems(item);
 
             _availableItems.RemoveAll(c => !c.HasValue);
@@ -75,9 +77,24 @@ namespace Atomos
             _version++;
         }
 
+        public void SetCapacity(int capacity)
+        {
+            if (capacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(capacity));
+
+            _availableItems.Clear();
+            _availableItemsSet.Clear();
+
+            var availableItems = _availableItemsSet.Take(Math.Min(capacity, _availableItemsSet.Count)).ToArray();
+            foreach (TItem item in availableItems)
+                AddAvailableItems(item);
+
+            _version++;
+        }
+
         private void AddAvailableItems(TItem item)
         {
-            if(!_availableItemsSet.Add(item))
+            if (!_availableItemsSet.Add(item))
                 return;
 
             KeyedContainer container = EnsureKeyContainer(_keySelector.GetKey(item));
@@ -94,21 +111,6 @@ namespace Atomos
             _availableItems.Insert(~index, container);
 
             return container;
-        }
-
-        public void SetCapacity(int capacity)
-        {
-            if (capacity < 0)
-                throw new ArgumentOutOfRangeException(nameof(capacity));
-
-            _availableItems.Clear();
-            _availableItemsSet.Clear();
-
-            var availableItems = _availableItemsSet.Take(Math.Min(capacity, _availableItemsSet.Count)).ToArray();
-            foreach (TItem item in availableItems)
-                AddAvailableItems(item);
-
-            _version++;
         }
 
         #endregion

@@ -113,7 +113,9 @@
     <Compile Include="Atomos\Core\Pool\ArrayPoolHelper.cs" />
     <Compile Include="Atomos\Core\Pool\CollectionPool.cs" />
     <Compile Include="Atomos\Core\Pool\CollectionPoolItemFactory.cs" />
+    <Compile Include="Atomos\Core\Pool\DefaultKeySelector.cs" />
     <Compile Include="Atomos\Core\Pool\DefaultPoolItemFactory.cs" />
+    <Compile Include="Atomos\Core\Pool\KeyedPoolStorage.Enumerator.cs" />
     <Compile Include="Atomos\Core\Pool\FixedCollectionPoolGuard.cs" />
     <Compile Include="Atomos\Core\Pool\CollectionPoolMode.cs" />
     <Compile Include="Atomos\Core\Pool\CollectionPoolSettings.cs" />

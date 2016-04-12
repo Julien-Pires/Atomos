@@ -6,8 +6,6 @@ namespace Atomos
 {
     internal sealed partial class PoolStorage<T>
     {
-        #region Nested
-
         public struct Enumerator : IEnumerator<T>
         {
             #region Fields
@@ -77,7 +75,5 @@ namespace Atomos
 
             #endregion
         }
-
-        #endregion
     }
 }
