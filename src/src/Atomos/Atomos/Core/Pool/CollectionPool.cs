@@ -6,14 +6,20 @@ namespace Atomos
     public abstract class CollectionPool<TCollection> : BasePool<TCollection, int?>
         where TCollection : class, ICollection
     {
+        #region Fields
+
+        public static readonly CollectionPoolSettings<TCollection> DefaultSettings = new CollectionPoolSettings<TCollection>(); 
+
+        #endregion
+
         #region Constructors
 
         internal CollectionPool(CollectionPoolSettings<TCollection> settings, IPoolItemFactory<TCollection, int?> collectionFactory, 
             ICollectionPoolHelper<TCollection> collectionHelper)
             : base(settings,
-                 CreateStorage(settings, collectionHelper),
-                 CreateQuery(settings),
-                 CreateGuard(settings, collectionHelper),
+                 CreateStorage(settings ?? DefaultSettings, collectionHelper),
+                 CreateQuery(settings ?? DefaultSettings),
+                 CreateGuard(settings ?? DefaultSettings, collectionHelper),
                  collectionFactory)
         {
         }
@@ -26,8 +32,7 @@ namespace Atomos
             ICollectionPoolHelper<TCollection> collectionHelper)
         {
             IPoolStorage<TCollection> storage;
-            CollectionPoolMode mode = settings?.CollectionMode ?? default(CollectionPoolMode);
-            switch (mode)
+            switch (settings.CollectionMode)
             {
                 case CollectionPoolMode.Any:
                 case CollectionPoolMode.Fixed:
@@ -39,7 +44,7 @@ namespace Atomos
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(mode), $"{mode} is not a valid pool collection mode");
+                    throw new ArgumentOutOfRangeException(nameof(settings.CollectionMode), $"{settings.CollectionMode} is not a valid pool collection mode");
             }
 
             return storage;
@@ -48,16 +53,19 @@ namespace Atomos
         public static IPoolStorageQuery<TCollection, int?> CreateQuery(CollectionPoolSettings<TCollection> settings)
         {
             IPoolStorageQuery<TCollection, int?> query;
-            CollectionPoolMode mode = settings?.CollectionMode ?? default(CollectionPoolMode);
-            switch (mode)
+            switch (settings.CollectionMode)
             {
                 case CollectionPoolMode.Any:
                 case CollectionPoolMode.Fixed:
                     query = DefaultPoolStorageQuery<TCollection, int?>.Default;
                     break;
 
+                case CollectionPoolMode.Definite:
+                    query = new DefiniteCollectionPoolQuery<TCollection>(settings.InitialCapacity);
+                    break;
+
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(mode), $"{mode} is not a valid pool collection mode");
+                    throw new ArgumentOutOfRangeException(nameof(settings.CollectionMode), $"{settings.CollectionMode} is not a valid pool collection mode");
             }
 
             return query;
@@ -67,23 +75,22 @@ namespace Atomos
             ICollectionPoolHelper<TCollection> collectionHelper)
         {
             IPoolGuard<TCollection>[] guards;
-            int initialCapacity = settings?.InitialCapacity ?? 0;
-            CollectionPoolMode mode = settings?.CollectionMode ?? default(CollectionPoolMode);
-            switch (mode)
+            switch (settings.CollectionMode)
             {
                 case CollectionPoolMode.Any:
+                case CollectionPoolMode.Definite:
                     guards = new IPoolGuard<TCollection>[0];
                     break;
 
                 case CollectionPoolMode.Fixed:
                     guards = new IPoolGuard<TCollection>[]
                     {
-                        new FixedCollectionPoolGuard<TCollection>(initialCapacity, collectionHelper)
+                        new FixedCollectionPoolGuard<TCollection>(settings.InitialCapacity, collectionHelper)
                     };
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(mode), $"{mode} is not a valid pool collection mode");
+                    throw new ArgumentOutOfRangeException(nameof(settings.CollectionMode), $"{settings.CollectionMode} is not a valid pool collection mode");
             }
 
             return guards;

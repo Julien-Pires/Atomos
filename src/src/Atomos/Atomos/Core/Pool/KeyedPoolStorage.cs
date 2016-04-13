@@ -32,7 +32,7 @@ namespace Atomos
 
         public KeyedContainer this[int index] => _availableItems[index];
 
-        public int Count => _availableItems.Count;
+        public int Count => _availableItemsSet.Count;
 
         #endregion
 

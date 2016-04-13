@@ -20,7 +20,7 @@ namespace Atomos.Tests.Pool
         protected TPool Build(int capacity = 0, PoolingMode mode = PoolingMode.Strict,
             Func<TItem> initializer = null, Action<TItem> reset = null)
         {
-            return (Builder as BasePool_Builder<TPool, TItem, PoolSettings<TItem>>)?
+            return ((BasePool_Builder<TPool, TItem>)Builder)
                 .WithInitialCapacity(capacity)
                 .WithPoolingMode(mode)
                 .WithInitializer(initializer)

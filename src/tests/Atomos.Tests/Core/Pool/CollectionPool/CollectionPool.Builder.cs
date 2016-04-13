@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Atomos.Tests.Pool
 {
-    public sealed class CollectionPool_Builder<TPool, TItem> : BasePool_Builder<TPool, TItem, CollectionPoolSettings<TItem>>
+    public sealed class CollectionPool_Builder<TPool, TItem> : BasePool_Builder<TPool, TItem>
         where TPool : CollectionPool<TItem>, IPool<TItem>
         where TItem : class, ICollection
     {
@@ -16,7 +16,7 @@ namespace Atomos.Tests.Pool
 
         #region Constructors
 
-        public CollectionPool_Builder(Func<CollectionPoolSettings<TItem>, TPool> factory) : base(factory)
+        public CollectionPool_Builder(Func<PoolSettings<TItem>, TPool> factory) : base(factory)
         {
         }
 
@@ -24,14 +24,14 @@ namespace Atomos.Tests.Pool
 
         #region Methods
 
-        protected override CollectionPoolSettings<TItem> CreateSettings()
+        protected override object CreateSettings()
         {
             return new CollectionPoolSettings<TItem>();
         }
 
-        protected override CollectionPoolSettings<TItem> PrepareSettings()
+        protected override object PrepareSettings()
         {
-            CollectionPoolSettings<TItem> settings = base.PrepareSettings();
+            CollectionPoolSettings<TItem> settings = (CollectionPoolSettings<TItem>)base.PrepareSettings();
             settings.InitialCapacity = _initialCapacity;
             settings.CollectionMode = _collectionMode;
 

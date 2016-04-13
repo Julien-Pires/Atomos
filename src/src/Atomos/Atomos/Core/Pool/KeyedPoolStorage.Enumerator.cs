@@ -50,15 +50,16 @@ namespace Atomos
 
             public bool MoveNext()
             {
-                bool canMove = _keyIndex < _storage.Count;
-                if (canMove && (_itemIndex >= _storage._availableItems[_keyIndex].Count))
+                while((_keyIndex < _storage.Count) && (_itemIndex >= _storage._availableItems[_keyIndex].Count))
                 {
                     _keyIndex++;
                     _itemIndex = 0;
-                    canMove = (_keyIndex < _storage.Count) && (_itemIndex < _storage._availableItems[_keyIndex].Count);
                 }
 
-                if (canMove && (_storage._version == _version))
+                bool canMove = (_keyIndex < _storage.Count) && 
+                               (_itemIndex < _storage._availableItems[_keyIndex].Count) &&
+                               (_storage._version == _version);
+                if (canMove)
                 {
                     Current = _storage._availableItems[_keyIndex][_itemIndex];
                     _itemIndex++;

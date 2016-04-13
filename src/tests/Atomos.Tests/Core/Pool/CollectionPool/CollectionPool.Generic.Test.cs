@@ -9,7 +9,7 @@ namespace Atomos.Tests.Pool
     {
         #region Constructors
 
-        protected CollectionPool_Generic_Test(Func<CollectionPoolSettings<TItem>,  TPool> factory)
+        protected CollectionPool_Generic_Test(Func<PoolSettings<TItem>,  TPool> factory)
             : base(new CollectionPool_Builder<TPool, TItem>(factory))
         {
         }

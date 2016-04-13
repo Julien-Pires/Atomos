@@ -1,5 +1,5 @@
 ﻿using PoolBuilder = Atomos.Tests.Pool.BasePool_Builder<Atomos.Pool<Atomos.Tests.Pool.PoolItem_Test>, 
-    Atomos.Tests.Pool.PoolItem_Test, Atomos.PoolSettings<Atomos.Tests.Pool.PoolItem_Test>>;
+    Atomos.Tests.Pool.PoolItem_Test>;
 
 namespace Atomos.Tests.Pool
 {

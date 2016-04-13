@@ -21,7 +21,7 @@ namespace Atomos.Tests.Pool
             PoolItem<T> itemTwo = pool.Get();
 
             Assert.NotEqual(itemOne, itemTwo);
-            Assert.NotEqual(itemOne.Item, itemTwo.Item);
+            Assert.False(itemOne.Item.Equals(itemTwo.Item));
         }
     }
 }

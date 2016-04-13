@@ -5,11 +5,13 @@
         #region Constructors
 
         protected ArrayPool_Generic_Test()
-            : base(c => new ArrayPool<T>(c))
+            : base(c => new ArrayPool<T>((CollectionPoolSettings<T[]>)c))
         {
         }
 
         #endregion
+
+        #region Methods
 
         protected override int GetValue(T[] item) => item.Length;
 
@@ -20,5 +22,7 @@
         protected override T[] CreateItem(int capacity) => new T[capacity];
 
         protected override int GetCapacity(T[] pool) => pool.Length;
+
+        #endregion
     }
 }
