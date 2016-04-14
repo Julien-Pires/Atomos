@@ -91,5 +91,13 @@ namespace Atomos.Tests.Pool
             Assert.NotEqual(value, GetValue(item));
             Assert.Equal(0, GetValue(item));
         }
+
+        [Theory]
+        [InlineData(int.MaxValue)]
+        [InlineData(int.MinValue)]
+        public void Constructor_WhenInvalidPoolingMode_ThrowPoolException(int value)
+        {
+            Assert.Throws<PoolException>(() => Build(mode:(PoolingMode)value));
+        }
     }
 }
