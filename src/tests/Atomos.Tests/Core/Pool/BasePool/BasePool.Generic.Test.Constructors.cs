@@ -44,6 +44,9 @@ namespace Atomos.Tests.Pool
         [InlineData(int.MinValue)]
         public void Constructor_CustomInitializer(int value)
 		{
+            if(CantUseInitializer)
+                return;
+
 		    TPool pool = Build(initializer: () => CreateItem(value));
 
             Assert.Equal(value, GetValue(pool.Get()));
@@ -59,7 +62,7 @@ namespace Atomos.Tests.Pool
             TItem item = pool.Get();
             pool.Set(item);
 
-            Assert.Equal(value, GetValue(pool.Get()));
+            Assert.Equal(0, GetValue(pool.Get()));
         }
 
         [Theory]

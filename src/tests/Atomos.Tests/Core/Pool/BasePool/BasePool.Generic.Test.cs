@@ -31,6 +31,8 @@ namespace Atomos.Tests.Pool
 
         #region Items Methods
 
+        protected virtual bool CantUseInitializer => false;
+
         protected abstract int GetValue(TItem item);
 
         protected abstract TItem CreateItem(int value);

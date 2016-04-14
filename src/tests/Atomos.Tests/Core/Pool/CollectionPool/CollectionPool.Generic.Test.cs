@@ -7,6 +7,12 @@ namespace Atomos.Tests.Pool
         where TPool : CollectionPool<TItem>, IPool<TItem>
         where TItem : class, ICollection
     {
+        #region Properties
+
+        protected override bool CantUseInitializer => true;
+
+        #endregion
+
         #region Constructors
 
         protected CollectionPool_Generic_Test(Func<PoolSettings<TItem>,  TPool> factory)

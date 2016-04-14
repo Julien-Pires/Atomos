@@ -24,7 +24,7 @@ namespace Atomos.Tests.Pool
         public void Reset()
         {
             IsReset = true;
-            Value = -1;
+            Value = 0;
         }
 
         #endregion
