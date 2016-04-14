@@ -44,7 +44,7 @@ namespace Atomos
             Capacity = settings.Capacity;
             Initializer = settings.Initializer;
             Reset = settings.Reset;
-        }  
+        }
 
         #endregion
     }

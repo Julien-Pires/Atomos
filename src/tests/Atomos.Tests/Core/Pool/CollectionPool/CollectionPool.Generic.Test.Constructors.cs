@@ -1,4 +1,5 @@
-﻿using Xunit;
+﻿using System;
+using Xunit;
 
 namespace Atomos.Tests.Pool
 {
@@ -17,7 +18,7 @@ namespace Atomos.Tests.Pool
         [InlineData(int.MinValue)]
         public void Ctor_WhenNegativeInitialCapacity_ThrowException(int initialCapacity)
         {
-            Assert.Throws<PoolException>(() => Build(initialCapacity: initialCapacity));
+            Assert.Throws<ArgumentOutOfRangeException>(() => Build(initialCapacity: initialCapacity));
         }
     }
 }

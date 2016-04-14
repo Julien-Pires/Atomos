@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Linq;
 
 namespace Atomos
 {
@@ -16,12 +17,30 @@ namespace Atomos
 
         internal CollectionPool(CollectionPoolSettings<TCollection> settings, IPoolItemFactory<TCollection, int?> collectionFactory, 
             ICollectionPoolHelper<TCollection> collectionHelper)
-            : base(settings,
+            : base(ValidateSettings(settings),
                  CreateStorage(settings ?? DefaultSettings, collectionHelper),
                  CreateQuery(settings ?? DefaultSettings),
                  CreateGuard(settings ?? DefaultSettings, collectionHelper),
                  collectionFactory)
         {
+        }
+
+        #endregion
+
+        #region Validation
+
+        private static CollectionPoolSettings<TCollection> ValidateSettings(CollectionPoolSettings<TCollection> settings)
+        {
+            if (settings == null)
+                return null;
+
+            if(settings.InitialCapacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(settings.InitialCapacity), "Collection initial capacity must be positive");
+
+            if(Enum.GetValues(typeof (CollectionPoolMode)).Cast<CollectionPoolMode>().All(c => c != settings.CollectionMode))
+                throw new PoolException($"{settings.CollectionMode} is not a valid pool collection mode");
+
+            return settings;
         }
 
         #endregion
@@ -44,7 +63,7 @@ namespace Atomos
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(settings.CollectionMode), $"{settings.CollectionMode} is not a valid pool collection mode");
+                    throw new PoolException($"{settings.CollectionMode} is not a valid pool collection mode");
             }
 
             return storage;
@@ -65,7 +84,7 @@ namespace Atomos
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(settings.CollectionMode), $"{settings.CollectionMode} is not a valid pool collection mode");
+                    throw new PoolException($"{settings.CollectionMode} is not a valid pool collection mode");
             }
 
             return query;
@@ -90,7 +109,7 @@ namespace Atomos
                     break;
 
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(settings.CollectionMode), $"{settings.CollectionMode} is not a valid pool collection mode");
+                    throw new PoolException($"{settings.CollectionMode} is not a valid pool collection mode");
             }
 
             return guards;

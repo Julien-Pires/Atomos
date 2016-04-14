@@ -55,7 +55,7 @@ namespace Atomos
         protected BasePool(PoolSettings<TItem> settings, IPoolStorage<TItem> storage, IPoolStorageQuery<TItem, TParam> query,
             IEnumerable<IPoolGuard<TItem>> guards = null, IPoolItemFactory<TItem, TParam> itemFactory = null)
         {
-            settings = settings ?? new PoolSettings<TItem>();
+            settings = ValidateSettings(settings) ?? new PoolSettings<TItem>();
 
             _itemFactory = itemFactory ?? new DefaultPoolItemFactory<TItem, TParam>(settings.Initializer ?? New<TItem>.Create);
             _reset = settings.Reset ?? ResetAction;
@@ -78,6 +78,24 @@ namespace Atomos
 
         #endregion
 
+        #region Validation
+
+        private static PoolSettings<TItem> ValidateSettings(PoolSettings<TItem> settings)
+        {
+            if (settings == null)
+                return null;
+
+            if (settings.Capacity < 0)
+                throw new ArgumentOutOfRangeException(nameof(settings.Capacity), "Initial pool capacity must be positive");
+
+            if (Enum.GetValues(typeof(PoolingMode)).Cast<PoolingMode>().All(c => c != settings.Mode))
+                throw new PoolException($"{settings.Mode} is not a valid pooling mode");
+
+            return settings;
+        } 
+
+        #endregion
+
         #region Initialize
 
         private static IStorageGuard<TItem> CreateStorageGuard(PoolSettings<TItem> settings)
@@ -95,7 +113,7 @@ namespace Atomos
                     break;
 
                 default:
-                    throw new ArgumentException($"{mode} is not a valid pooling mode");
+                    throw new PoolException($"{mode} is not a valid pooling mode");
             }
 
             return storageGuard;
