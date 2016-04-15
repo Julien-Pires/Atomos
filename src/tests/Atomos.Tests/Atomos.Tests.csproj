@@ -118,6 +118,8 @@
     <Compile Include="Core\Pool\CollectionPool\CollectionPool.Generic.Test.Definite.Set.Cs" />
     <Compile Include="Core\Pool\CollectionPool\CollectionPool.Generic.Test.Fixed.Get.Cs" />
     <Compile Include="Core\Pool\CollectionPool\CollectionPool.Generic.Test.Fixed.Set.cs" />
+    <Compile Include="Core\Pool\CollectionPool\ListPool.Test.cs" />
+    <Compile Include="Core\Pool\CollectionPool\ListPool.Generic.Test.cs" />
     <Compile Include="Core\Pool\IPool\IPool.Builder.cs" />
     <Compile Include="Core\Pool\IPool\IPool.Generic.Test.Dispose.cs" />
     <Compile Include="Core\Pool\BasePool\BasePool.Generic.Test.cs" />
