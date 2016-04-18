@@ -17,7 +17,6 @@ namespace Atomos
     {
         #region Fields
 
-        private static readonly IPoolGuard<TItem>[] EmptyGuards = new IPoolGuard<TItem>[0];
         private static readonly Action<TItem> EmptyAction = c => { };
         private static readonly Action<TItem> DisposeAction = c => (c as IDisposable)?.Dispose();
         private static readonly Action<TItem> ResetAction = c => (c as IPoolItem)?.Reset();
@@ -61,7 +60,7 @@ namespace Atomos
             _reset = settings.Reset ?? ResetAction;
 
             _storageGuard = CreateStorageGuard(settings);
-            _poolGuards = guards != null ? guards.ToArray() : EmptyGuards;
+            _poolGuards = guards != null ? guards.Concat(new [] { _storageGuard }).ToArray() : new IPoolGuard<TItem>[] { _storageGuard };
             _storage = storage;
             _query = query;
 
@@ -220,9 +219,6 @@ namespace Atomos
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
 
-            if (!_storageGuard.CanSet(item, _storage))
-                throw new PoolException($"Failed to set {item}, guard rules not fullfilled");
-
             if (_poolGuards.Any(t => !t.CanSet(item, _storage)))
                 throw new PoolException($"Failed to set {item}, guard rules not fullfilled");
 
@@ -238,9 +234,6 @@ namespace Atomos
         /// <returns>Return an element from the pool, if no elements are available a new one will be created</returns>
         protected PoolItem<TItem> Get(TParam parameter)
         {
-            if (!_storageGuard.CanGet(_storage))
-                throw new PoolException("Failed to get an item, guard rules not fullfilled");
-
             if (_poolGuards.Any(t => !t.CanGet(_storage)))
                 throw new PoolException("Failed to get an item, guard rules not fullfilled");
 
