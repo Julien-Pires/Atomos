@@ -1,6 +1,9 @@
 # Summary
 
 * [Introduction](README.md)
-    * [Core]
-        * [Pool]
-    
+   * [Getting Started] 
+   * [User Guide]
+      * [Core]
+         * [Pool]
+   * [API]
+   * [Release Notes]
