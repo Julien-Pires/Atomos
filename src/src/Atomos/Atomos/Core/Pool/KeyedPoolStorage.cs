@@ -30,9 +30,9 @@ namespace Atomos
 
         #region Properties
 
-        public KeyedContainer this[int index] => _availableItems[index];
-
         public int Count => _availableItemsSet.Count;
+
+        public int KeyCount => _availableItems.Count;
 
         #endregion
 
@@ -82,10 +82,10 @@ namespace Atomos
             if (capacity < 0)
                 throw new ArgumentOutOfRangeException(nameof(capacity));
 
+            var availableItems = _availableItemsSet.Take(Math.Min(capacity, _availableItemsSet.Count)).ToArray();
             _availableItems.Clear();
             _availableItemsSet.Clear();
 
-            var availableItems = _availableItemsSet.Take(Math.Min(capacity, _availableItemsSet.Count)).ToArray();
             foreach (TItem item in availableItems)
                 AddAvailableItems(item);
 
@@ -95,7 +95,7 @@ namespace Atomos
         private void AddAvailableItems(TItem item)
         {
             if (!_availableItemsSet.Add(item))
-                return;
+                throw new PoolException($"Item {item} can't be set twice on the storage");
 
             KeyedContainer container = EnsureKeyContainer(_keySelector.GetKey(item));
             container.Set(item);
@@ -127,11 +127,24 @@ namespace Atomos
 
         public bool IsAvailable(TItem item) => _availableItemsSet.Contains(item);
 
-        public TItem Get(TKey key)
+        public int FindKeyIndex(TKey key)
+        {
+            return _availableItems.BinarySearch(key, (item, value) => Comparer<TKey>.Default.Compare(item.Key, value));
+        }
+
+        public TItem GetByKey(TKey key)
         {
             int index = _availableItems.BinarySearch(key, (item, value) => Comparer<TKey>.Default.Compare(item.Key, value));
 
-            return index > -1 ? _availableItems[index].Get() : null;
+            return index > -1 ? GetByIndex(index) : null;
+        }
+
+        public TItem GetByIndex(int index)
+        {
+            TItem item = _availableItems[index].Get();
+            _availableItemsSet.Remove(item);
+
+            return item;
         }
 
         TItem IPoolStorage<TItem>.Get()

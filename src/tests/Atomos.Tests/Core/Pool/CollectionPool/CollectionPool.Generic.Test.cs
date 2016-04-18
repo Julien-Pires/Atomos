@@ -25,12 +25,13 @@ namespace Atomos.Tests.Pool
         #region Builder
 
         protected TPool Build(CollectionPoolMode collectionMode = CollectionPoolMode.Any,
-            int initialCapacity = 0, PoolingMode mode = PoolingMode.Strict)
+            int initialCapacity = 0, PoolingMode mode = PoolingMode.Strict, int initialPoolCapacity = 0)
         {
             return (Builder as CollectionPool_Builder<TPool, TItem>)?
                 .WithCollectionPoolMode(collectionMode)
                 .WithCollectionCapacity(initialCapacity)
-                .WithPoolingMode(mode);
+                .WithPoolingMode(mode)
+                .WithInitialCapacity(initialPoolCapacity);
         }
 
         #endregion

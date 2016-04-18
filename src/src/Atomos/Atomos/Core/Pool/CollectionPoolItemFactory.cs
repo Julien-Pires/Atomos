@@ -20,7 +20,9 @@ namespace Atomos
         {
             _factory = factory;
             _capacity = (settings?.InitialCapacity).GetValueOrDefault();
-            _useParameter = (settings?.CollectionMode ?? CollectionPoolMode.Any) == CollectionPoolMode.Definite;
+
+            CollectionPoolMode mode = settings?.CollectionMode ?? CollectionPoolMode.Any;
+            _useParameter = (mode == CollectionPoolMode.Definite) || (mode == CollectionPoolMode.Nearest);
         }
 
         #endregion

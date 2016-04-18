@@ -59,6 +59,7 @@ namespace Atomos
                     break;
 
                 case CollectionPoolMode.Definite:
+                case CollectionPoolMode.Nearest:
                     storage = new KeyedPoolStorage<TCollection, int>(new DefaultKeySelector<TCollection, int>(collectionHelper.GetCapacity));
                     break;
 
@@ -83,6 +84,10 @@ namespace Atomos
                     query = new DefiniteCollectionPoolQuery<TCollection>(settings.InitialCapacity);
                     break;
 
+                case CollectionPoolMode.Nearest:
+                    query = new NearestCollectionPoolQuery<TCollection>(settings.InitialCapacity);
+                    break;
+
                 default:
                     throw new PoolException($"{settings.CollectionMode} is not a valid pool collection mode");
             }
@@ -98,6 +103,7 @@ namespace Atomos
             {
                 case CollectionPoolMode.Any:
                 case CollectionPoolMode.Definite:
+                case CollectionPoolMode.Nearest:
                     guards = new IPoolGuard<TCollection>[0];
                     break;
 

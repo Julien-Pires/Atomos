@@ -24,7 +24,7 @@ namespace Atomos
 
         public TCollection Search(IPoolStorage<TCollection> storage, int? parameter)
         {
-            return ((KeyedPoolStorage<TCollection, int>)storage).Get(parameter ?? _defaultCapacity);
+            return ((KeyedPoolStorage<TCollection, int>)storage).GetByKey(parameter ?? _defaultCapacity);
         }
 
         #endregion

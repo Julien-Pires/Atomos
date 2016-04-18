@@ -4,6 +4,7 @@
     {
         Any,
         Definite,
-        Fixed
+        Fixed,
+        Nearest
     }
 }
