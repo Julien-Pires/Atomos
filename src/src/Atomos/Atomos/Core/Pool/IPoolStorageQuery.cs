@@ -1,6 +1,7 @@
 ﻿namespace Atomos
 {
-    public interface IPoolStorageQuery<TItem, in TParam> where TItem : class
+    public interface IPoolStorageQuery<TItem, in TParam>
+        where TItem : class
     {
         #region Methods
 

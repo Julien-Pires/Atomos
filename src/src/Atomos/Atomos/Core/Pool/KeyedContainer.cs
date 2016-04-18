@@ -2,21 +2,21 @@
 
 namespace Atomos
 {
-    internal partial class KeyedPoolStorage<TItem, TKey>
+    public partial class KeyedPoolStorage<TItem, TKey>
     {
         internal class KeyedContainer
         {
             #region Fields
 
-            private readonly List<TItem> _items = new List<TItem>(); 
+            private readonly List<TItem> _items = new List<TItem>();
 
             #endregion
 
             #region Properties
 
-            internal TItem this[int index] => _items[index];
+            public TItem this[int index] => _items[index];
 
-            internal int Count => _items.Count;
+            public int Count => _items.Count;
 
             public TKey Key { get; }
 

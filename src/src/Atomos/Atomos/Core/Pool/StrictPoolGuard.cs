@@ -1,6 +1,7 @@
 ﻿namespace Atomos
 {
-    internal class StrictPoolGuard<TItem> : IStorageGuard<TItem> where TItem : class
+    internal class StrictPoolGuard<TItem> : IStorageGuard, IPoolGuard<TItem> 
+        where TItem : class
     {
         #region Guards
 

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Atomos
 {
-    internal sealed partial class PoolStorage<T>
+    public sealed partial class PoolStorage<T>
     {
         public struct Enumerator : IEnumerator<T>
         {
@@ -13,15 +13,14 @@ namespace Atomos
             private readonly PoolStorage<T> _storage;
             private int _index;
             private readonly int _version;
-            private T _current;
 
             #endregion
 
             #region Properties
 
-            public T Current => _current;
+            public T Current { get; private set; }
 
-            object IEnumerator.Current => _current;
+            object IEnumerator.Current => Current;
 
             #endregion
 
@@ -32,7 +31,7 @@ namespace Atomos
                 _storage = storage;
                 _index = 0;
                 _version = storage._version;
-                _current = default(T);
+                Current = default(T);
             }
 
             #endregion
@@ -52,12 +51,12 @@ namespace Atomos
                 bool canMove = (_index < _storage._availableItems.Count) && (_storage._version == _version);
                 if (canMove)
                 {
-                    _current = _storage._availableItems[_index];
+                    Current = _storage._availableItems[_index];
                     _index++;
                 }
 				else
                 {
-                    _current = default(T);
+                    Current = default(T);
                     _index = _storage._availableItems.Count + 1;
                 }
 
@@ -70,7 +69,7 @@ namespace Atomos
                     throw new InvalidOperationException("Failed to reset iterator because the storage has been modified");
 
                 _index = 0;
-                _current = default(T);
+                Current = default(T);
             }
 
             #endregion

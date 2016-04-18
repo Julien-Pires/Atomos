@@ -3,7 +3,7 @@ using System.Collections;
 
 namespace Atomos
 {
-    internal sealed class CollectionPoolItemFactory<TCollection> : IPoolItemFactory<TCollection, int?>
+    public sealed class CollectionPoolItemFactory<TCollection> : IPoolItemFactory<TCollection, int?>
         where TCollection : class, ICollection
     {
         #region Properties

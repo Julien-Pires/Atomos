@@ -1,6 +1,7 @@
 ﻿namespace Atomos
 {
-    internal interface IKeySelector<in TItem, out TKey> where TItem : class
+    public interface IKeySelector<in TItem, out TKey> 
+        where TItem : class
     {
         #region Methods
 

@@ -7,7 +7,8 @@ namespace Atomos
     /// Represents a pool of items
     /// </summary>
     /// <typeparam name="T">Type of item</typeparam>
-    public interface IPool<T> : IDisposable where T : class
+    public interface IPool<T> : IDisposable 
+        where T : class
     {
         #region Properties
 

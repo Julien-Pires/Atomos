@@ -2,7 +2,7 @@
 
 namespace Atomos
 {
-    internal sealed class DefaultPoolItemFactory<TItem, TParam> : IPoolItemFactory<TItem, TParam>
+    public sealed class DefaultPoolItemFactory<TItem, TParam> : IPoolItemFactory<TItem, TParam>
         where TItem : class
     {
         #region Fields

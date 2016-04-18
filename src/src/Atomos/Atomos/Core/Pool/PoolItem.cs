@@ -6,7 +6,8 @@ namespace Atomos
     /// Represents a wrapper around a pool item to ease item release
     /// </summary>
     /// <typeparam name="T">Type of pool item</typeparam>
-    public struct PoolItem<T> : IDisposable where T : class
+    public struct PoolItem<T> : IDisposable 
+        where T : class
     {
         #region Fields
 

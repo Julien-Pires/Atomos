@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Atomos
 {
-    internal partial class KeyedPoolStorage<TItem, TKey>
+    public partial class KeyedPoolStorage<TItem, TKey>
     {
         public struct Enumerator : IEnumerator<TItem>
         {

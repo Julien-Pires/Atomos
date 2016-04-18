@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 
 namespace Atomos
 {
@@ -43,7 +42,7 @@ namespace Atomos
                     index = -1;
             }
 
-            return (index > -1) ? keyedStorage.GetByIndex(index) : null;
+            return index > -1 ? keyedStorage.GetByIndex(index) : null;
         }
 
         #endregion

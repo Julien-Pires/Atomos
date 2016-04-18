@@ -3,7 +3,8 @@
     /// <summary>
     /// Represents a guard proxy between a pool storage and a pool
     /// </summary>
-    public interface IPoolGuard<TItem> where TItem : class
+    public interface IPoolGuard<TItem> 
+        where TItem : class
     {
         #region Methods
 

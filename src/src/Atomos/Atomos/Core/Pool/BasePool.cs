@@ -13,7 +13,7 @@ namespace Atomos
     /// </summary>
     /// <typeparam name="TItem">Type of pool elements</typeparam>
     /// <typeparam name="TParam">Type of pool parameters</typeparam>
-    public abstract class BasePool<TItem, TParam> : IPool<TItem> where TItem : class
+    public class BasePool<TItem, TParam> : IPool<TItem> where TItem : class
     {
         #region Fields
 
@@ -23,7 +23,7 @@ namespace Atomos
 
         private bool _isDisposed;
         private readonly IPoolStorage<TItem> _storage;
-        private readonly IStorageGuard<TItem> _storageGuard;
+        private readonly IStorageGuard _storageGuard;
         private readonly IPoolGuard<TItem>[] _poolGuards;
         private readonly IPoolStorageQuery<TItem, TParam> _query;
         private readonly IPoolItemFactory<TItem, TParam> _itemFactory;
@@ -51,19 +51,29 @@ namespace Atomos
             DisposeAction = typeof(IDisposable).GetTypeInfo().IsAssignableFrom(typeof(TItem).GetTypeInfo()) ? DisposeAction : EmptyAction;
         }
 
-        protected BasePool(PoolSettings<TItem> settings, IPoolStorage<TItem> storage, IPoolStorageQuery<TItem, TParam> query,
-            IEnumerable<IPoolGuard<TItem>> guards = null, IPoolItemFactory<TItem, TParam> itemFactory = null)
+        public BasePool(IPoolStorage<TItem> storage, IPoolStorageQuery<TItem, TParam> query,
+            IEnumerable<IPoolGuard<TItem>> guards = null, IPoolItemFactory<TItem, TParam> itemFactory = null,
+            PoolSettings<TItem> settings = null)
         {
+            if(storage == null)
+                throw new ArgumentNullException(nameof(storage), "Storage cannot be null");
+
+            if(query == null)
+                throw new ArgumentNullException(nameof(query), "Query cannot be null");
+
             settings = ValidateSettings(settings) ?? new PoolSettings<TItem>();
 
-            _itemFactory = itemFactory ?? new DefaultPoolItemFactory<TItem, TParam>(settings.Initializer ?? New<TItem>.Create);
-            _reset = settings.Reset ?? ResetAction;
-
-            _storageGuard = CreateStorageGuard(settings);
-            _poolGuards = guards != null ? guards.Concat(new [] { _storageGuard }).ToArray() : new IPoolGuard<TItem>[] { _storageGuard };
             _storage = storage;
             _query = query;
+            _reset = settings.Reset ?? ResetAction;
+            _itemFactory = itemFactory ??
+                           new DefaultPoolItemFactory<TItem, TParam>(settings.Initializer ?? New<TItem>.Create);
 
+            _storageGuard = CreateStorageGuard(settings);
+
+            var poolGuards = new[] { _storageGuard as IPoolGuard<TItem> };
+            _poolGuards = (guards != null ? guards.Concat(poolGuards) : poolGuards).Where(c => c != null).ToArray();
+            
             _storage.SetCapacity(settings.Capacity);
             for (int i = 0; i < settings.Capacity; i++)
             {
@@ -97,10 +107,10 @@ namespace Atomos
 
         #region Initialize
 
-        private static IStorageGuard<TItem> CreateStorageGuard(PoolSettings<TItem> settings)
+        private static IStorageGuard CreateStorageGuard(PoolSettings<TItem> settings)
         {
             PoolingMode mode = settings.Mode;
-            IStorageGuard<TItem> storageGuard;
+            IStorageGuard storageGuard;
             switch(mode)
             {
                 case PoolingMode.Strict:

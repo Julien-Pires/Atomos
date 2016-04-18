@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace Atomos
 {
-    internal sealed partial class PoolStorage<T> : IPoolStorage<T> where T : class
+    public sealed partial class PoolStorage<T> : IPoolStorage<T> where T : class
     {
         #region Fields
 

@@ -2,7 +2,7 @@
 
 namespace Atomos
 {
-    internal sealed class DefaultKeySelector<TItem, TKey> : IKeySelector<TItem, TKey>
+    public sealed class DefaultKeySelector<TItem, TKey> : IKeySelector<TItem, TKey>
         where TItem : class
     {
         #region Fields

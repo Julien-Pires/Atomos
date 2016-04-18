@@ -6,7 +6,8 @@ namespace Atomos
     /// Represents a pool storage used to store elements
     /// </summary>
     /// <typeparam name="T"></typeparam>
-    public interface IPoolStorage<T> : IEnumerable<T> where T : class
+    public interface IPoolStorage<T> : IEnumerable<T> 
+        where T : class
     {
         #region Properties
 

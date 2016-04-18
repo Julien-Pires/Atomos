@@ -6,7 +6,7 @@ using Atomos.Collections.Extension;
 
 namespace Atomos
 {
-    internal partial class KeyedPoolStorage<TItem, TKey> : IPoolStorage<TItem>
+    public sealed partial class KeyedPoolStorage<TItem, TKey> : IPoolStorage<TItem>
         where TItem : class
     {
         #region Fields

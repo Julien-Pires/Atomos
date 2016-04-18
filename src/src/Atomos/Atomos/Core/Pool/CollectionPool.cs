@@ -4,24 +4,24 @@ using System.Collections;
 
 namespace Atomos
 {
-    public abstract class CollectionPool<TCollection> : BasePool<TCollection, int?>
+    public class CollectionPool<TCollection> : BasePool<TCollection, int?>
         where TCollection : class, ICollection
     {
         #region Fields
 
-        public static readonly CollectionPoolSettings<TCollection> DefaultSettings = new CollectionPoolSettings<TCollection>(); 
+        private static readonly CollectionPoolSettings<TCollection> DefaultSettings = new CollectionPoolSettings<TCollection>();
 
         #endregion
 
         #region Constructors
 
-        internal CollectionPool(CollectionPoolSettings<TCollection> settings, IPoolItemFactory<TCollection, int?> collectionFactory, 
+        public CollectionPool(CollectionPoolSettings<TCollection> settings, IPoolItemFactory<TCollection, int?> collectionFactory, 
             ICollectionPoolHelper<TCollection> collectionHelper)
-            : base(ValidateSettings(settings),
-                 CreateStorage(settings ?? DefaultSettings, collectionHelper),
+            : base(CreateStorage(settings ?? DefaultSettings, collectionHelper),
                  CreateQuery(settings ?? DefaultSettings),
                  CreateGuard(settings ?? DefaultSettings, collectionHelper),
-                 collectionFactory)
+                 collectionFactory,
+                 ValidateSettings(settings))
         {
         }
 
@@ -47,7 +47,7 @@ namespace Atomos
 
         #region Initialization
 
-        public static IPoolStorage<TCollection> CreateStorage(CollectionPoolSettings<TCollection> settings,
+        private static IPoolStorage<TCollection> CreateStorage(CollectionPoolSettings<TCollection> settings,
             ICollectionPoolHelper<TCollection> collectionHelper)
         {
             IPoolStorage<TCollection> storage;
@@ -70,14 +70,14 @@ namespace Atomos
             return storage;
         }
 
-        public static IPoolStorageQuery<TCollection, int?> CreateQuery(CollectionPoolSettings<TCollection> settings)
+        private static IPoolStorageQuery<TCollection, int?> CreateQuery(CollectionPoolSettings<TCollection> settings)
         {
             IPoolStorageQuery<TCollection, int?> query;
             switch (settings.CollectionMode)
             {
                 case CollectionPoolMode.Any:
                 case CollectionPoolMode.Fixed:
-                    query = DefaultPoolStorageQuery<TCollection, int?>.Default;
+                    query = new DefaultPoolStorageQuery<TCollection, int?>();
                     break;
 
                 case CollectionPoolMode.Definite:
@@ -95,7 +95,7 @@ namespace Atomos
             return query;
         }
 
-        public static IPoolGuard<TCollection>[] CreateGuard(CollectionPoolSettings<TCollection> settings, 
+        private static IPoolGuard<TCollection>[] CreateGuard(CollectionPoolSettings<TCollection> settings, 
             ICollectionPoolHelper<TCollection> collectionHelper)
         {
             IPoolGuard<TCollection>[] guards;
