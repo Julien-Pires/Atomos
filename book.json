@@ -2,7 +2,7 @@
     "gitbook": "2.x.x",
     "plugins": [],
     "structure" : {
-        "summary" : "docs/summary.md"
+        "summary" : "docs/SUMMARY.md"
     },
     "pluginsConfig": {}
 }
