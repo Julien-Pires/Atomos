@@ -1,8 +1,5 @@
 {
-    "gitbook": "2.x.x",
+    "gitbook": "3.x.x",
     "plugins": [],
-    "structure" : {
-        "summary" : "docs/summary.md"
-    },
     "pluginsConfig": {}
 }
