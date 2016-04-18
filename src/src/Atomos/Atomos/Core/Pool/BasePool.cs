@@ -177,8 +177,6 @@ namespace Atomos
         /// <returns>Return an element from the pool, if no elements are available a new one will be created</returns>
         public PoolItem<TItem> Get()
         {
-            CheckDisposeState();
-
             return Get(default(TParam));
         }
 
@@ -188,8 +186,6 @@ namespace Atomos
         /// <param name="item">Represents an element that must be returned</param>
         public void Set(TItem item)
         {
-            CheckDisposeState();
-
             Set(item, default(TParam));
         }
 
@@ -199,8 +195,6 @@ namespace Atomos
         /// <param name="items">The collection of elements that must be returned</param>
         public void Set(IEnumerable<TItem> items)
         {
-            CheckDisposeState();
-
             if (items == null)
                 throw new ArgumentNullException(nameof(items));
 
@@ -216,6 +210,8 @@ namespace Atomos
         /// <param name="parameter">Additional parameter</param>
         protected void Set(TItem item, TParam parameter)
         {
+            CheckDisposeState();
+
             if (item == null)
                 throw new ArgumentNullException(nameof(item));
 
@@ -234,6 +230,8 @@ namespace Atomos
         /// <returns>Return an element from the pool, if no elements are available a new one will be created</returns>
         protected PoolItem<TItem> Get(TParam parameter)
         {
+            CheckDisposeState();
+
             if (_poolGuards.Any(t => !t.CanGet(_storage)))
                 throw new PoolException("Failed to get an item, guard rules not fullfilled");
 
